@@ -50,8 +50,7 @@ def populate_lax_stats():
 			score1, score2 = map(int, data[6].text.split(" - "))
 
 			if (team1 in d1_mcla and team2 in d1_mcla and score1 + score2 > 0):
-				if (team1 == "Texas" or team2 == "Texas"):
-					my_cursor.execute(insert_query, (team1, team2, score1, score2))
+				my_cursor.execute(insert_query, (team1, team2, score1, score2))
 				
 
 

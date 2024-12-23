@@ -1,20 +1,40 @@
 const express = require('express');
 const app = express();
-require('dotenv').config()
+require('dotenv').config({ path: '../.env' });
 
 const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
 	host: process.env.DB_HOST,
 	user: process.env.DB_USER,
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_NAME
   });
 
-connection.connect();
 
-app.get('/api/games', (req, res) => {
-	connection.query('SELECT * FROM games', (err, result, fields) => {
+db.connect((err) => {
+	if (err) {
+		console.error('Database connection failed:', err.stack);
+	} else {
+		console.log('Connected to database');
+	}
+});
+
+app.get('/api/games/', (req, res) => {
+	var query = `SELECT * FROM games LIMIT 100`;
+	db.query(query, (err, result, fields) => {
+		if (err) {
+			res.status(500).send('Database query failed');
+		} else {
+			res.json(result);
+		}
+	});	
+});
+
+app.get('/api/games/:team', (req, res) => {
+	var team = req.params.team;
+	var query = `SELECT * FROM games WHERE team1 = '${team}' OR team2 = '${team}'`;
+	db.query(query, (err, result, fields) => {
 		if (err) {
 			res.status(500).send('Database query failed');
 		} else {
@@ -24,9 +44,10 @@ app.get('/api/games', (req, res) => {
 });
 
 app.get("/", (req, res) => {
-	res.send("Hello, lacrosse user!");
+	res.send("Hello, lax_stats user!");
 });
 
+const port = process.env.PORT || 3000;
 app.listen(3000, () => {
-	console.log("I'm listeningggg");
+	console.log(`Listening on port ${port}...`);
 });
