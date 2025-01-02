@@ -38,6 +38,7 @@ app.get('/api/games/:team', (req, res) => {
 		if (err) {
 			res.status(500).send('Database query failed');
 		} else {
+			if (result.length == 0) res.status(404).send("The team could not be found.");
 			res.json(result);
 		}
 	});	

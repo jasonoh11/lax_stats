@@ -1,0 +1,13 @@
+.ranking-container{
+	display: flex;
+	justify-content: space-around;
+}
+
+.rank-num{
+	align-self: flex-start;
+}
+
+.logo{
+	width: auto;
+	height: 32px;
+}
