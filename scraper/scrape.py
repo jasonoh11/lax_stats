@@ -16,10 +16,6 @@ db_connection = mysql.connector.connect(
 my_cursor = db_connection.cursor()
 
 
-insert_query = """
-INSERT INTO games (team1, team2, score1, score2)
-VALUES (%s, %s, %s, %s)
-"""
 
 d1_mcla = set()
 
@@ -33,6 +29,24 @@ def get_num_pages():
 
 
 def populate_lax_stats():
+
+	insert_query = """
+				INSERT INTO games (team1, team2, score1, score2)
+				VALUES (%s, %s, %s, %s)
+				"""
+	
+	update_win_query = """
+					UPDATE teams
+					SET wins = wins + 1
+					WHERE team_name = %s;
+					"""
+	update_loss_query = """
+					UPDATE teams
+					SET losses = losses + 1
+					WHERE team_name = %s;
+					"""
+	
+
 	my_cursor.execute("TRUNCATE TABLE games")
 
 	for i in range(get_num_pages()):
@@ -51,10 +65,13 @@ def populate_lax_stats():
 
 			if (team1 in d1_mcla and team2 in d1_mcla and score1 + score2 > 0):
 				my_cursor.execute(insert_query, (team1, team2, score1, score2))
+				if score1 > score2:
+					my_cursor.execute(update_win_query, (team1,))
+					my_cursor.execute(update_loss_query, (team2,))
+				else:
+					my_cursor.execute(update_win_query, (team2,))
+					my_cursor.execute(update_loss_query, (team1,))
 				
-
-
-	db_connection.commit()
 
 
 	
@@ -77,16 +94,29 @@ def populate_d1_set():
 	for row in rows:
 		d1_mcla.add(row.a.text.strip())
 
+
+def populate_teams():
+	populate_d1_set()
+	insert_query = """
+					INSERT INTO teams (team_name, wins, losses, rating)
+					VALUES (%s, %s, %s, %s)
+				   """
+	
+	my_cursor.execute("TRUNCATE TABLE teams")
+
+	for team in d1_mcla:
+		my_cursor.execute(insert_query, (team, 0, 0, 0.00))
+
 				
 
 
 def main():
-
-	populate_d1_set()
+	populate_teams()
 	populate_lax_stats()
-
 	my_cursor.close()
+	db_connection.commit()
 	db_connection.close()
 
 if __name__ == "__main__":
     main()
+

@@ -44,11 +44,23 @@ app.get('/api/games/:team', (req, res) => {
 	});	
 });
 
+app.get('/api/teams/', (req, res) => {
+	var query = 'SELECT * FROM teams ORDER BY wins DESC LIMIT 10';
+	db.query(query, (err, result, fields) => {
+		if (err) {
+			res.status(500).send('Database query failed');
+		} else {
+			res.json(result);
+		}
+	});
+
+});
+
 app.get("/", (req, res) => {
 	res.send("Hello, lax_stats user!");
 });
 
 const port = process.env.PORT || 3000;
-app.listen(3000, () => {
+app.listen(port, () => {
 	console.log(`Listening on port ${port}...`);
 });
