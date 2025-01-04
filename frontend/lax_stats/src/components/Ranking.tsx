@@ -1,15 +1,21 @@
 import "./Ranking.css"
 
-const Ranking = () => {
+interface Props  {
+	teamName: String;
+	wins: String;
+	losses: String;
+}
+
+const Ranking = ({teamName, wins, losses}: Props) => {
   return (
-	<div className = "ranking-container">
+	<div className = "ranking-container list-group-item">
 		<div className = "team-info">
 			<span>#</span>
 			<span>img</span>
-			<span>Team State</span>
+			<span>{teamName}</span>
 		</div>
 		<div className = "team-stats">
-			<span>00-0</span>
+			<span>{wins + "-" + losses}</span>
 			<span>00.0</span>
 			<span>00.0</span>
 		</div>
