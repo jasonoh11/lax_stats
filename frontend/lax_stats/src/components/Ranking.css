@@ -1,17 +1,43 @@
-.ranking-container{
-	display: flex;
-
+.list-group-item.odd {
+	background-color: #f8f9fa;
 }
 
-.team-info{
-	width: 20%;
-	display: flex;
-	justify-content: space-around;
+.list-group-item.even {
+	background-color: #e2e6ea;
 }
+
+.team-info {
+	display: flex;
+	justify-content: flex-start; /* Align horizontally to the left */
+  }
+  
+.team-info span {
+	margin-right: 10px; /* Add space between elements */
+  }
 
 .team-stats{
-	width: 80%;
 	display: flex;
 	justify-content: space-around;
+}
+
+.team-number,
+.team-img,
+.team-name {
+  display: inline-block;
+  width: 100%; /* Makes each span take equal width within the flex container */
+}
+
+.team-number {
+
+}
+
+.team-img {
+  height: 25px;
+  width: auto;
+}
+
+.team-name {
+  min-width: 200px; /* Set a minimum width for the team name */
+  margin-left: 10px;
 }
 

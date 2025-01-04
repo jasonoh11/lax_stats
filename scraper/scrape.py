@@ -17,7 +17,7 @@ my_cursor = db_connection.cursor()
 
 
 
-d1_mcla = set()
+d1_mcla = {}
 
 def get_num_pages():
 	url = 'https://mcla.us/schedule/2024/'
@@ -89,26 +89,38 @@ def populate_d1_set():
 
 	rows = teams.find_all("tr")
 
-	# Print the selected rows
-	# print(rows[0].a.text)
-	for row in rows:
-		d1_mcla.add(row.a.text.strip())
+	images = []
+
+	for icon in soup.find_all("i", class_="team-icon"):
+		style = icon.get("style", "")
+		start = style.find("url('") + 5
+		end = style.find("')", start)
+		image_url = "https:" + style[start:end]
+		images.append(image_url)
+
+
+	for i, row in enumerate(rows):
+		team_name = row.a.text.strip()
+		d1_mcla[team_name] = images[i]
+
+	
+
 
 
 def populate_teams():
+
 	populate_d1_set()
 	insert_query = """
-					INSERT INTO teams (team_name, wins, losses, rating)
-					VALUES (%s, %s, %s, %s)
+					INSERT INTO teams (team_name, wins, losses, rating, logo_url)
+					VALUES (%s, %s, %s, %s, %s)
 				   """
 	
 	my_cursor.execute("TRUNCATE TABLE teams")
 
 	for team in d1_mcla:
-		my_cursor.execute(insert_query, (team, 0, 0, 0.00))
+		my_cursor.execute(insert_query, (team, 0, 0, 0.00, d1_mcla[team]))
 
 				
-
 
 def main():
 	populate_teams()

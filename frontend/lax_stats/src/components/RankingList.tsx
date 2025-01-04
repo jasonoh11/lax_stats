@@ -1,12 +1,12 @@
 import "./RankingList.css";
 import Ranking from "./Ranking";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const RankingList = () => {
   var [teams, setTeams] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/teams", {mode: "cors"})
+    fetch("http://localhost:3000/api/teams", { mode: "cors" })
       .then((res) => {
         return res.json();
       })
@@ -15,12 +15,21 @@ const RankingList = () => {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
-      })
+      });
   }, []);
 
   return (
     <ul className="list-group">
-      {teams.map(team => <Ranking key = {team.id} teamName={team.team_name} wins={team.wins} losses = {team.losses}/>)};
+      {teams.map((team, index) => (
+        <Ranking
+          key={index}
+          rank={index + 1}
+          teamName={team["team_name"]}
+          wins={team["wins"]}
+          losses={team["losses"]}
+          logo_url={team["logo_url"]}
+        />
+      ))}
     </ul>
   );
 };

@@ -1,20 +1,22 @@
 import "./Ranking.css"
-
+ 
 interface Props  {
+	rank: number;
 	teamName: String;
-	wins: String;
-	losses: String;
+	wins: number;
+	losses: number;
+	logo_url: string
 }
 
-const Ranking = ({teamName, wins, losses}: Props) => {
+const Ranking = ({rank, teamName, wins, losses, logo_url}: Props) => {
   return (
-	<div className = "ranking-container list-group-item">
-		<div className = "team-info">
-			<span>#</span>
-			<span>img</span>
-			<span>{teamName}</span>
+	<div className = {rank % 2 === 0 ? "d-flex list-group-item even" : "d-flex list-group-item odd"}>
+		<div className = "team-info col-2">
+			<span className = "team-number">{rank}</span>
+			<img className = "team-img" src = {logo_url}/>
+			<span className = "team-name">{teamName}</span>
 		</div>
-		<div className = "team-stats">
+		<div className = "team-stats col-10">
 			<span>{wins + "-" + losses}</span>
 			<span>00.0</span>
 			<span>00.0</span>

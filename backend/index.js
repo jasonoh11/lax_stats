@@ -47,7 +47,7 @@ app.get('/api/games/:team', (req, res) => {
 });
 
 app.get('/api/teams/', (req, res) => {
-	var query = 'SELECT * FROM teams ORDER BY wins DESC LIMIT 10';
+	var query = 'SELECT * FROM teams ORDER BY wins DESC';
 	db.query(query, (err, result, fields) => {
 		if (err) {
 			res.status(500).send('Database query failed');
