@@ -27,6 +27,7 @@ const RankingList = () => {
           teamName={team["team_name"]}
           wins={team["wins"]}
           losses={team["losses"]}
+          rating={team["rating"]}
           logo_url={team["logo_url"]}
         />
       ))}

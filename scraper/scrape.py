@@ -4,6 +4,8 @@ import mysql
 import mysql.connector
 from dotenv import load_dotenv
 import os
+import numpy as np
+
 
 load_dotenv()
 db_connection = mysql.connector.connect(
@@ -17,8 +19,11 @@ my_cursor = db_connection.cursor()
 
 
 
-d1_mcla = {}
 
+'''
+Scrape the number of pages in the schedule
+Helper for populate_games
+'''
 def get_num_pages():
 	url = 'https://mcla.us/schedule/2024/'
 	html_text = requests.get(url).text
@@ -28,23 +33,15 @@ def get_num_pages():
 	return int((pagination.find_all("li"))[-2].a.text)
 
 
-def populate_lax_stats():
+'''
+Scrape scores and populate games table
+'''
+def populate_games(league):
 
 	insert_query = """
 				INSERT INTO games (team1, team2, score1, score2)
 				VALUES (%s, %s, %s, %s)
 				"""
-	
-	update_win_query = """
-					UPDATE teams
-					SET wins = wins + 1
-					WHERE team_name = %s;
-					"""
-	update_loss_query = """
-					UPDATE teams
-					SET losses = losses + 1
-					WHERE team_name = %s;
-					"""
 	
 
 	my_cursor.execute("TRUNCATE TABLE games")
@@ -63,34 +60,35 @@ def populate_lax_stats():
 			team2 = data[5].a.text
 			score1, score2 = map(int, data[6].text.split(" - "))
 
-			if (team1 in d1_mcla and team2 in d1_mcla and score1 + score2 > 0):
+			if (team1 in league and team2 in league and score1 + score2 > 0):
 				my_cursor.execute(insert_query, (team1, team2, score1, score2))
-				if score1 > score2:
-					my_cursor.execute(update_win_query, (team1,))
-					my_cursor.execute(update_loss_query, (team2,))
-				else:
-					my_cursor.execute(update_win_query, (team2,))
-					my_cursor.execute(update_loss_query, (team1,))
+				# if score1 > score2:
+				# 	my_cursor.execute(update_win_query, (team1,))
+				# 	my_cursor.execute(update_loss_query, (team2,))
+				# else:
+				# 	my_cursor.execute(update_win_query, (team2,))
+				# 	my_cursor.execute(update_loss_query, (team1,))
 				
 
 
-	
-		
-
-
-def populate_d1_set():
+'''
+Scrape the names and icons for d1 MCLA
+'''
+def get_d1_teams():
 	# conferences = ["alc", "clc", "lsa", "pncll", "rmlc", "selc", "slc", "umlc", "wcll"]
+	d1_mcla = {}
 
 	url = "https://mcla.us/teams"
 	html_text = requests.get(url).text
 	soup = BeautifulSoup(html_text, 'lxml')
 
+	# scrape teams
 	teams = soup.find(class_="team-roster")
-
 	rows = teams.find_all("tr")
 
 	images = []
 
+	# scrape images
 	for icon in soup.find_all("i", class_="team-icon"):
 		style = icon.get("style", "")
 		start = style.find("url('") + 5
@@ -98,18 +96,21 @@ def populate_d1_set():
 		image_url = "https:" + style[start:end]
 		images.append(image_url)
 
-
+	# populate dict
 	for i, row in enumerate(rows):
 		team_name = row.a.text.strip()
 		d1_mcla[team_name] = images[i]
 
+	return d1_mcla
+
 	
 
 
+'''
+Add team name and icon to database
+'''
+def populate_league(league):
 
-def populate_teams():
-
-	populate_d1_set()
 	insert_query = """
 					INSERT INTO teams (team_name, wins, losses, rating, logo_url)
 					VALUES (%s, %s, %s, %s, %s)
@@ -117,14 +118,93 @@ def populate_teams():
 	
 	my_cursor.execute("TRUNCATE TABLE teams")
 
-	for team in d1_mcla:
-		my_cursor.execute(insert_query, (team, 0, 0, 0.00, d1_mcla[team]))
+	for team in league:
+		my_cursor.execute(insert_query, (team, 0, 0, 0.00, league[team]))
 
-				
+'''
+Read from games table to populate record field in teams table
+'''
+def update_records():
+	update_win_query = """
+				UPDATE teams
+				SET wins = wins + 1
+				WHERE team_name = %s;
+				"""
+	update_loss_query = """
+					UPDATE teams
+					SET losses = losses + 1
+					WHERE team_name = %s;
+					"""
+	
+	my_cursor.execute("SELECT * FROM games")
+	games = my_cursor.fetchall()
+
+	for (id, team1, team2, score1, score2) in games:
+		if score1 > score2:
+			my_cursor.execute(update_win_query, (team1, ))
+			my_cursor.execute(update_loss_query, (team2, ))
+		else:
+			my_cursor.execute(update_win_query, (team2, ))
+			my_cursor.execute(update_loss_query, (team1, ))
+
+	
+def calculate_rank(league):
+	my_cursor.execute("SELECT * FROM games")
+	games = my_cursor.fetchall()
+	ids = {} # map teams to their id
+	for i, n in enumerate(league):
+		ids[n] = i
+
+	num_teams = len(ids)
+
+	adj_matrix = np.zeros((num_teams, num_teams))
+
+	for (_, team1, team2, score1, score2) in games:
+		loser = team1 if score1 < score2 else team2
+		winner = team1 if score1 > score2 else team2
+		margin = abs(score1 - score2)
+
+		adj_matrix[ids[loser], ids[winner]] = margin
+
+	
+
+	uniform_matrix = np.ones((num_teams, num_teams)) / num_teams
+	markov_matrix = (0.85) * adj_matrix + (0.15) * uniform_matrix
+
+	for row in markov_matrix:
+		row_sum = 0
+		for n in row:
+			row_sum += n
+		if row_sum != 0:
+			for i, n in enumerate(row):
+				row[i] = (n / row_sum)
+	
+
+	eigenvalues, eigenvectors = np.linalg.eig(markov_matrix.T)
+	principal_eigenvector = eigenvectors[:, np.isclose(eigenvalues, 1)]
+	principal_eigenvector = principal_eigenvector / np.sum(principal_eigenvector)
+	ranking_vector = np.real(principal_eigenvector)
+	# mean_value = np.mean(ranking_vector)
+	# std_dev = np.std(ranking_vector)
+	# z_scores = (ranking_vector - mean_value) / std_dev	
+
+	update_rating_query = """
+				UPDATE teams
+				SET rating = %s
+				WHERE team_name = %s;
+				"""
+	
+	for (team, id) in ids.items():
+		# print("Team:", team, ranking_vector[id] * 100)
+		rating = float(ranking_vector[id].item() * 100)
+		my_cursor.execute(update_rating_query, (rating, team))
+
 
 def main():
-	populate_teams()
-	populate_lax_stats()
+	d1_mcla = get_d1_teams()
+	# populate_league(d1_mcla)
+	# populate_games(d1_mcla)
+	calculate_rank(d1_mcla)
 	my_cursor.close()
 	db_connection.commit()
 	db_connection.close()

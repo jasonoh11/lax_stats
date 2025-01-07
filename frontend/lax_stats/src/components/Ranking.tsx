@@ -5,10 +5,11 @@ interface Props  {
 	teamName: String;
 	wins: number;
 	losses: number;
+	rating: number;
 	logo_url: string
 }
 
-const Ranking = ({rank, teamName, wins, losses, logo_url}: Props) => {
+const Ranking = ({rank, teamName, wins, losses, rating, logo_url}: Props) => {
   return (
 	<div className = {rank % 2 === 0 ? "d-flex list-group-item even" : "d-flex list-group-item odd"}>
 		<div className = "team-info col-2">
@@ -18,7 +19,7 @@ const Ranking = ({rank, teamName, wins, losses, logo_url}: Props) => {
 		</div>
 		<div className = "team-stats col-10">
 			<span>{wins + "-" + losses}</span>
-			<span>00.0</span>
+			<span>{rating}</span>
 			<span>00.0</span>
 		</div>
 	</div>
