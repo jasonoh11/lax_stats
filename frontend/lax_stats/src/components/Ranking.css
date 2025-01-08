@@ -1,43 +1,44 @@
+/* alternate background colors */
 .list-group-item.odd {
 	background-color: #f8f9fa;
 }
-
 .list-group-item.even {
 	background-color: #e2e6ea;
 }
 
+/* flex container */
+div.list-group-item {
+  display: flex;  
+}
+
 .team-info {
-	display: flex;
-	justify-content: flex-start; /* Align horizontally to the left */
-  }
-  
-.team-info span {
-	margin-right: 10px; /* Add space between elements */
-  }
-
-.team-stats{
-	display: flex;
-	justify-content: space-around;
-}
-
-.team-number,
-.team-img,
-.team-name {
-  display: inline-block;
-  width: 100%; /* Makes each span take equal width within the flex container */
-}
-
-.team-number {
+	display: flex; /* flex conatiner for rank, img, name*/
+  width: 20%;
+  min-width: 200px;
 
 }
 
-.team-img {
+.team-number{
+  flex: 0 0 25px; /* fixed width */
+}
+.team-img{
+  flex: 0 0 25px; /* fixed width */
+  margin-left: 5px;
   height: 25px;
   width: auto;
 }
 
 .team-name {
-  min-width: 200px; /* Set a minimum width for the team name */
+  flex: 1; /* fill the rest of team-info */
   margin-left: 10px;
+}
+  
+
+.team-stats{
+  flex-grow: 1; /* take up the rest of list-group-item */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+  justify-items: center;
+  text-align: left;
 }
 

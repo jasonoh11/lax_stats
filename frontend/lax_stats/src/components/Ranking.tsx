@@ -11,13 +11,13 @@ interface Props  {
 
 const Ranking = ({rank, teamName, wins, losses, rating, logo_url}: Props) => {
   return (
-	<div className = {rank % 2 === 0 ? "d-flex list-group-item even" : "d-flex list-group-item odd"}>
-		<div className = "team-info col-2">
+	<div className = {rank % 2 === 0 ? "list-group-item even" : "list-group-item odd"}>
+		<div className = "team-info">
 			<span className = "team-number">{rank}</span>
 			<img className = "team-img" src = {logo_url}/>
 			<span className = "team-name">{teamName}</span>
 		</div>
-		<div className = "team-stats col-10">
+		<div className = "team-stats">
 			<span>{wins + "-" + losses}</span>
 			<span>{rating}</span>
 			<span>00.0</span>
