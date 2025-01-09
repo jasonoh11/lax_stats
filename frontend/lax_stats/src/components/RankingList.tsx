@@ -1,6 +1,7 @@
 import "./RankingList.css";
 import Ranking from "./Ranking";
 import React, { useState, useEffect } from "react";
+import RankingHeader from "./RankingHeader";
 
 const RankingList = () => {
   var [teams, setTeams] = useState([]);
@@ -20,6 +21,7 @@ const RankingList = () => {
 
   return (
     <ul className="list-group">
+      <RankingHeader league="MCLA D1" title1="Record" title2="Rating" title3="Schedule"/>
       {teams.map((team, index) => (
         <Ranking
           key={index}

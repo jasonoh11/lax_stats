@@ -1,0 +1,25 @@
+/* flex container */
+div.list-group-item {
+	display: flex;  
+  }
+
+.list-group-item.ranking-header{
+	background-color: #1a2b44;
+	color: white;
+	font-family: 'Roboto', sans-serif;
+}
+
+.ranking-title{
+	/* background-color: lightblue; */
+	width: 20%;
+	min-width: 200px;
+}
+
+.stats-titles{
+	flex-grow: 1; /* take up the rest of list-group-item */
+	display: grid;
+	grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+	justify-items: center;
+	text-align: left;
+	/* background-color: lightcoral; */
+}

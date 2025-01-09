@@ -9,13 +9,14 @@
 /* flex container */
 div.list-group-item {
   display: flex;  
+  font-family: 'Roboto', sans-serif;
 }
 
 .team-info {
 	display: flex; /* flex conatiner for rank, img, name*/
   width: 20%;
   min-width: 200px;
-
+  /* background-color: lightblue; */
 }
 
 .team-number{
@@ -40,5 +41,6 @@ div.list-group-item {
   grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
   justify-items: center;
   text-align: left;
+  /* background-color: lightcoral; */
 }
 
