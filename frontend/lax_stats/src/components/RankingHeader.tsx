@@ -36,9 +36,7 @@ const RankingHeader = ({league, title1, title2, title3} : Props) => {
         <span>{title1}</span>
         <div>
           <span>{title2}</span>
-          <span className = "info-tooltip">
-            <i className="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="This is my tooltip"></i>
-          </span>
+            <i className="bi bi-info-circle info-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="This is my tooltip"></i>
         </div>
         <span>{title3}</span>
       </div>
