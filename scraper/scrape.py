@@ -163,6 +163,10 @@ def calculate_rank(league):
 		loser = team1 if score1 < score2 else team2
 		winner = team1 if score1 > score2 else team2
 		margin = abs(score1 - score2)
+		# total = score1 + score2
+
+		# adj_matrix[ids[team1], ids[team2]] = score2 + 1 / total + 2
+		# adj_matrix[ids[team2], ids[team1]] = score1 + 1 / total + 2
 
 		adj_matrix[ids[loser], ids[winner]] = margin
 
@@ -183,10 +187,21 @@ def calculate_rank(league):
 	eigenvalues, eigenvectors = np.linalg.eig(markov_matrix.T)
 	principal_eigenvector = eigenvectors[:, np.isclose(eigenvalues, 1)]
 	principal_eigenvector = principal_eigenvector / np.sum(principal_eigenvector)
-	ranking_vector = np.real(principal_eigenvector)
-	# mean_value = np.mean(ranking_vector)
-	# std_dev = np.std(ranking_vector)
-	# z_scores = (ranking_vector - mean_value) / std_dev	
+	ranking_vector = np.real(principal_eigenvector)	
+
+
+	# Normalize the values to 0–1
+	x_min = ranking_vector.min()
+	x_max = ranking_vector.max()
+	normalized = (ranking_vector - x_min) / (x_max - x_min)
+
+	# Define logistic parameters
+	A = 100  # Maximum value
+	k = 10   # Steepness of the curve
+	x0 = 0.5 # Midpoint in the normalized range
+
+	# Apply logistic scaling
+	scaled_ratings = A / (1 + np.exp(-k * (normalized - x0)))
 
 	update_rating_query = """
 				UPDATE teams
@@ -196,8 +211,21 @@ def calculate_rank(league):
 	
 	for (team, id) in ids.items():
 		# print("Team:", team, ranking_vector[id] * 100)
-		rating = float(ranking_vector[id].item() * 100)
+		rating = float(scaled_ratings[id].item())
 		my_cursor.execute(update_rating_query, (rating, team))
+
+def calculate_schedule():
+
+	# init map to store team -> aggregate rating of opponents
+
+	# get entries of games
+
+	# for each game, get the rating of each team
+
+	# add to map 
+
+	return 0
+
 
 
 def main():

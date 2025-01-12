@@ -25,7 +25,7 @@ const RankingHeader = ({league, title1, title2, title3} : Props) => {
     return () => {
       tooltipList.forEach((tooltip) => tooltip.dispose());
     };
-  }, []);
+}, []);
 
   // data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
 
@@ -36,7 +36,9 @@ const RankingHeader = ({league, title1, title2, title3} : Props) => {
         <span>{title1}</span>
         <div>
           <span>{title2}</span>
-          <i className="bi bi-info-circle"></i>
+          <span className = "info-tooltip">
+            <i className="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="This is my tooltip"></i>
+          </span>
         </div>
         <span>{title3}</span>
       </div>
