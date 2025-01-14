@@ -6,10 +6,11 @@ interface Props  {
 	wins: number;
 	losses: number;
 	rating: number;
+	schedule: number;
 	logo_url: string
 }
 
-const Ranking = ({rank, teamName, wins, losses, rating, logo_url}: Props) => {
+const Ranking = ({rank, teamName, wins, losses, rating, schedule, logo_url}: Props) => {
   return (
 	<div className = {rank % 2 === 0 ? "list-group-item even" : "list-group-item odd"}>
 		<div className = "team-info">
@@ -20,7 +21,7 @@ const Ranking = ({rank, teamName, wins, losses, rating, logo_url}: Props) => {
 		<div className = "team-stats">
 			<span>{wins + "-" + losses}</span>
 			<span>{rating}</span>
-			<span>00.0</span>
+			<span>{schedule}</span>
 		</div>
 	</div>
 
