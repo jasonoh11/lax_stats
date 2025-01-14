@@ -6,7 +6,9 @@ function App() {
 
   return (
     <>
+    <div className="main-card">
       <RankingList/>
+    </div>
     </>
   )
 }

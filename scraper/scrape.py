@@ -216,23 +216,64 @@ def calculate_rank(league):
 
 def calculate_schedule():
 
-	# init map to store team -> aggregate rating of opponents
+	# init map to store team -> (games played, aggregate rating of opponenets)
+	aggregate_opp_rating = {}
 
 	# get entries of games
+	my_cursor.execute("SELECT * FROM games")
+	games = my_cursor.fetchall()
 
 	# for each game, get the rating of each team
 
-	# add to map 
+	get_rating_query = """
+				SELECT rating
+				FROM teams
+				WHERE team_name = %s;
+				"""
+	
+	for (_, team1, team2, score1, score2) in games:
 
-	return 0
+		my_cursor.execute(get_rating_query, (team1, ))
+		team1_rating = my_cursor.fetchone()[0]
+		my_cursor.execute(get_rating_query, (team2, ))
+		team2_rating = my_cursor.fetchone()[0]
 
+		if team1 in aggregate_opp_rating:
+			entry = list(aggregate_opp_rating[team1])
+			entry[0] += 1
+			entry[1] += team2_rating
+			aggregate_opp_rating[team1] = tuple(entry)
+		else:
+			aggregate_opp_rating[team1] = (1, team2_rating)
+
+		if team2 in aggregate_opp_rating:
+			entry = list(aggregate_opp_rating[team2])
+			entry[0] += 1
+			entry[1] += team1_rating
+			aggregate_opp_rating[team2] = tuple(entry)
+		else:
+			aggregate_opp_rating[team2] = (1, team1_rating)
+
+
+	insert_schedule_query = """
+					UPDATE teams
+					SET schedule = %s
+					WHERE team_name = %s
+					"""
+	
+
+	for (team, (games_played, opp_rating)) in aggregate_opp_rating.items():
+		avg_opp_rating = opp_rating / games_played
+		my_cursor.execute(insert_schedule_query, (avg_opp_rating, team))
 
 
 def main():
 	d1_mcla = get_d1_teams()
 	# populate_league(d1_mcla)
 	# populate_games(d1_mcla)
-	calculate_rank(d1_mcla)
+	# update_records()
+	# calculate_rank(d1_mcla)
+	calculate_schedule()
 	my_cursor.close()
 	db_connection.commit()
 	db_connection.close()
