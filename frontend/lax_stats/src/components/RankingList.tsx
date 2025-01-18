@@ -2,6 +2,7 @@ import "./RankingList.css";
 import Ranking from "./Ranking";
 import React, { useState, useEffect } from "react";
 import RankingHeader from "./RankingHeader";
+import ListGroup from 'react-bootstrap/ListGroup';
 
 const RankingList = () => {
   var [teams, setTeams] = useState([]);
@@ -20,7 +21,8 @@ const RankingList = () => {
   }, []);
 
   return (
-    <ul className="list-group">
+    <>
+      <ListGroup>
       <RankingHeader league="MCLA D1" title1="Record" title2="Rating" title3="Schedule"/>
       {teams.map((team, index) => (
         <Ranking
@@ -34,7 +36,8 @@ const RankingList = () => {
           logo_url={team["logo_url"]}
         />
       ))}
-    </ul>
+    </ListGroup>
+    </>
   );
 };
 

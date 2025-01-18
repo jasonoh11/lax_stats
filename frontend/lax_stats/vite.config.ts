@@ -9,7 +9,6 @@ export default defineConfig({
       allow: [
         // Include the default workspace root rule
         searchForWorkspaceRoot(process.cwd()),
-        // Add your custom path
         '/Users/jasonoh/lax_stats/node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2',
       ],
     },

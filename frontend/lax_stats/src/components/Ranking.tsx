@@ -1,4 +1,5 @@
 import "./Ranking.css"
+import ListGroup from 'react-bootstrap/ListGroup';
  
 interface Props  {
 	rank: number;
@@ -12,7 +13,8 @@ interface Props  {
 
 const Ranking = ({rank, teamName, wins, losses, rating, schedule, logo_url}: Props) => {
   return (
-	<div className = {rank % 2 === 0 ? "list-group-item even" : "list-group-item odd"}>
+
+	<ListGroup.Item className = {rank % 2 === 0 ? "even" : "odd"}>
 		<div className = "team-info">
 			<span className = "team-number">{rank}</span>
 			<img className = "team-img" src = {logo_url}/>
@@ -23,7 +25,7 @@ const Ranking = ({rank, teamName, wins, losses, rating, schedule, logo_url}: Pro
 			<span>{rating}</span>
 			<span>{schedule}</span>
 		</div>
-	</div>
+	</ListGroup.Item>
 
   )
 }

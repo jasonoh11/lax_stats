@@ -160,15 +160,16 @@ def calculate_rank(league):
 	adj_matrix = np.zeros((num_teams, num_teams))
 
 	for (_, team1, team2, score1, score2) in games:
-		loser = team1 if score1 < score2 else team2
-		winner = team1 if score1 > score2 else team2
-		margin = abs(score1 - score2)
-		# total = score1 + score2
+		# loser = team1 if score1 < score2 else team2
+		# winner = team1 if score1 > score2 else team2
+		# margin = abs(score1 - score2)
 
-		# adj_matrix[ids[team1], ids[team2]] = score2 + 1 / total + 2
-		# adj_matrix[ids[team2], ids[team1]] = score1 + 1 / total + 2
+		# adj_matrix[ids[loser], ids[winner]] = margin
 
-		adj_matrix[ids[loser], ids[winner]] = margin
+		total = score1 + score2
+
+		adj_matrix[ids[team1], ids[team2]] = score2 + 1 / total + 2
+		adj_matrix[ids[team2], ids[team1]] = score1 + 1 / total + 2
 
 	
 
@@ -270,9 +271,9 @@ def calculate_schedule():
 def main():
 	d1_mcla = get_d1_teams()
 	# populate_league(d1_mcla)
-	# populate_games(d1_mcla)
+	populate_games(d1_mcla)
 	# update_records()
-	# calculate_rank(d1_mcla)
+	calculate_rank(d1_mcla)
 	calculate_schedule()
 	my_cursor.close()
 	db_connection.commit()
