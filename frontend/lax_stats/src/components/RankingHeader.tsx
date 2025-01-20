@@ -31,7 +31,7 @@ const RankingHeader = ({league, title1, title2, title3} : Props) => {
 
   return (
     <div className="list-group-item ranking-header">
-      <div className="ranking-title">{league}</div>
+      <div className="ranking-title">Team</div>
       <div className="stats-titles">
         <span>{title1}</span>
         <div>
