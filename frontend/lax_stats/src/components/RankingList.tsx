@@ -6,9 +6,12 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 const RankingList = () => {
   var [teams, setTeams] = useState([]);
+  var [sortingCriteria, setSortingCriteria] = useState("Rating");
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/teams", { mode: "cors" })
+    const url = `http://localhost:3000/api/teams?sort_by=${sortingCriteria.toLowerCase()}`;
+    console.log(url)
+    fetch(url, { mode: "cors" })
       .then((res) => {
         return res.json();
       })
@@ -18,12 +21,17 @@ const RankingList = () => {
       .catch((error) => {
         console.error("Fetch error:", error);
       });
-  }, []);
+  }, [sortingCriteria]);
+
+
+  const handleSortChange = (newSort: string) => {
+    setSortingCriteria(newSort);
+  }
 
   return (
     <>
       <ListGroup>
-      <RankingHeader league="MCLA D1" title1="Record" title2="Rating" title3="Schedule"/>
+      <RankingHeader league="MCLA D1" title1="Record" title2="Rating" title3="Schedule" sortingCriteria={sortingCriteria} onSortChange={handleSortChange}/>
       {teams.map((team, index) => (
         <Ranking
           key={index}

@@ -46,8 +46,14 @@ app.get('/api/games/:team', (req, res) => {
 	});	
 });
 
-app.get('/api/teams/', (req, res) => {
-	var query = 'SELECT * FROM teams ORDER BY rating DESC';
+app.get('/api/teams', (req, res) => {
+	const { sort_by } = req.query;
+
+	const allowedSortFields = ["rating", "schedule"];
+	if (!allowedSortFields.includes(sort_by)) {
+		return res.status(400).json({ error: "Invalid sorting criteria" });
+	}
+	var query = `SELECT * FROM teams ORDER BY ${sort_by} DESC`;
 	db.query(query, (err, result, fields) => {
 		if (err) {
 			res.status(500).send('Database query failed');

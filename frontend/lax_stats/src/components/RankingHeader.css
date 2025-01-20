@@ -1,12 +1,22 @@
-/* flex container */
-div.list-group-item {
-	display: flex;  
-  }
-
 .list-group-item.ranking-header{
 	background-color: #1a2b44;
 	color: white;
 	font-family: 'Roboto', sans-serif;
+	flex-direction: column;
+}
+
+div.header-dropdowns{
+	padding-bottom: 5px;
+}
+
+.dropdown-toggle{
+}
+
+/* flex container */
+div.header-labels {
+	margin-top: 5px;
+	display: flex;  
+	width: 100%;
 }
 
 .ranking-title{
