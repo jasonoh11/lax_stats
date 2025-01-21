@@ -20,6 +20,11 @@ div.list-group-item {
   /* background-color: lightblue; */
 }
 
+.team-link {
+  color: #212529;
+  text-decoration: none;
+}
+
 .team-number{
   flex: 0 0 25px; 
   margin-left: 0px;
