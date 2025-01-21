@@ -9,8 +9,13 @@ div.header-dropdowns{
 	padding-bottom: 5px;
 }
 
-.dropdown-toggle{
+.bi{
+	margin-right: 5px ;
 }
+
+.hover-effect:hover {
+	color: #ffdc51;
+  }
 
 /* flex container */
 div.header-labels {
