@@ -36,91 +36,75 @@ def get_num_pages():
 '''
 Scrape scores and populate games table
 '''
-def populate_games(league):
-
+def populate_games(league_set):
 	insert_query = """
 				INSERT INTO games (team1, team2, score1, score2)
 				VALUES (%s, %s, %s, %s)
 				"""
-	
-
 	my_cursor.execute("TRUNCATE TABLE games")
 
-	for i in range(get_num_pages()):
+	for i in range(2, 17):
 
-		url = "https://mcla.us/schedule/2024/?page=" + str(i + 1)
+		url = "https://mcla.us/games?current_season_year=2024&week_key=week-" + str(i)
 		html_text = requests.get(url).text
 		soup = BeautifulSoup(html_text, 'lxml')
+		teams = soup.findAll(class_="team__name")
+		scores = soup.findAll(class_="game-tile__score")
 
-		rows = soup.find_all('tr')
-		for row in rows[1:]:
-			data = row.find_all('td')
-
-			team1 = data[4].a.text
-			team2 = data[5].a.text
-			score1, score2 = map(int, data[6].text.split(" - "))
-
-			if (team1 in league and team2 in league and score1 + score2 > 0):
+		for i in range(0, len(teams), 2):
+			team1 = teams[i].text.strip()
+			team2 = teams[i+1].text.strip()
+			score1 = int(scores[i].text.strip())
+			score2 = int(scores[i+1].text.strip())
+			if team1 in league_set and team2 in league_set and score1 + score2 != 0:
 				my_cursor.execute(insert_query, (team1, team2, score1, score2))
-				# if score1 > score2:
-				# 	my_cursor.execute(update_win_query, (team1,))
-				# 	my_cursor.execute(update_loss_query, (team2,))
-				# else:
-				# 	my_cursor.execute(update_win_query, (team2,))
-				# 	my_cursor.execute(update_loss_query, (team1,))
+
 				
 
 
 '''
 Scrape the names and icons for d1 MCLA
 '''
-def get_d1_teams():
-	# conferences = ["alc", "clc", "lsa", "pncll", "rmlc", "selc", "slc", "umlc", "wcll"]
-	d1_mcla = {}
+def get_d1_teams(update_db):
+	d1_mcla = set()
 
-	url = "https://mcla.us/teams"
+	insert_query = """
+				INSERT INTO teams (team_name, wins, losses, rating, schedule, conference, league_id,  logo_url)
+				VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+				"""
+	
+	if update_db:
+		my_cursor.execute("TRUNCATE TABLE teams")
+	
+
+	url = "https://mcla.us/standings/division/d1?current_season_year=2024"
 	html_text = requests.get(url).text
 	soup = BeautifulSoup(html_text, 'lxml')
 
-	# scrape teams
-	teams = soup.find(class_="team-roster")
-	rows = teams.find_all("tr")
+	table = soup.find(id="teams-table")
+	table_body = table.find("tbody")
+	rows = table_body.find_all("tr")
 
-	images = []
 
-	# scrape images
-	for icon in soup.find_all("i", class_="team-icon"):
-		style = icon.get("style", "")
-		start = style.find("url('") + 5
-		end = style.find("')", start)
-		image_url = "https:" + style[start:end]
-		images.append(image_url)
+	for row in rows:
+		name_tag = row.find("a")
+		if name_tag:
+			team_name = name_tag.text.strip()
+			d1_mcla.add(team_name)
 
-	# populate dict
-	for i, row in enumerate(rows):
-		team_name = row.a.text.strip()
-		d1_mcla[team_name] = images[i]
+			if update_db:
+				img_tag = row.find("img")
+				if img_tag:
+					full_url = img_tag.get("src")
+					response = requests.get(full_url, allow_redirects=True)
+					image_url = response.url.strip()
+
+					my_cursor.execute(insert_query, (team_name, 0, 0, 0.00, 0.00, "-", 1, image_url))
+
 
 	return d1_mcla
 
 	
-
-
-'''
-Add team name and icon to database
-'''
-def populate_league(league):
-
-	insert_query = """
-					INSERT INTO teams (team_name, wins, losses, rating, logo_url)
-					VALUES (%s, %s, %s, %s, %s)
-				   """
-	
-	my_cursor.execute("TRUNCATE TABLE teams")
-
-	for team in league:
-		my_cursor.execute(insert_query, (team, 0, 0, 0.00, league[team]))
-
 '''
 Read from games table to populate record field in teams table
 '''
@@ -136,6 +120,7 @@ def update_records():
 					WHERE team_name = %s;
 					"""
 	
+	my_cursor.execute("UPDATE teams SET wins = 0, losses = 0;")
 	my_cursor.execute("SELECT * FROM games")
 	games = my_cursor.fetchall()
 
@@ -146,6 +131,11 @@ def update_records():
 		else:
 			my_cursor.execute(update_win_query, (team2, ))
 			my_cursor.execute(update_loss_query, (team1, ))
+
+
+	my_cursor.execute("DELETE FROM games WHERE team1 IN (SELECT team_name FROM teams WHERE (wins + losses) < 5) OR team2 IN (SELECT team_name FROM teams WHERE (wins + losses) < 5);")
+	my_cursor.execute("DELETE FROM teams WHERE (wins + losses) < 5;")
+
 
 	
 def calculate_rank(league):
@@ -269,10 +259,9 @@ def calculate_schedule():
 
 
 def main():
-	d1_mcla = get_d1_teams()
-	# populate_league(d1_mcla)
+	d1_mcla = get_d1_teams(False)
 	populate_games(d1_mcla)
-	# update_records()
+	update_records()
 	calculate_rank(d1_mcla)
 	calculate_schedule()
 	my_cursor.close()

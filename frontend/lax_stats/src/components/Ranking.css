@@ -29,10 +29,12 @@ div.list-group-item {
   flex: 0 0 25px; 
   margin-left: 0px;
 }
-.team-img{
+
+.team-img {
   flex: 0 0 25px; /* fixed width */
   height: 25px;
-  width: auto;
+  width: 25px; /* fixed width to match height */
+  object-fit: contain; 
 }
 
 .team-name {
