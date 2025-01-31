@@ -41,6 +41,11 @@ div.list-group-item {
   flex: 1; /* fill the rest of team-info */
   margin-left: 10px;
 }
+
+.team-name:hover{
+  color: #0066cc; /* Change to a color of your choice when hovered */
+  text-decoration: underline; /* Optionally add underline on hover */
+}
   
 
 .team-stats{
