@@ -69,15 +69,15 @@ def get_d1_teams(update_db):
 	d1_mcla = set()
 
 	insert_query = """
-				INSERT INTO teams (team_name, wins, losses, rating, schedule, conference, league_id,  logo_url)
-				VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+				INSERT INTO teams (team_name, full_name, wins, losses, rating, schedule, conference, league_id,  logo_url)
+				VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 				"""
 	
 	if update_db:
 		my_cursor.execute("TRUNCATE TABLE teams")
 	
 
-	url = "https://mcla.us/standings/division/d1?current_season_year=2024"
+	url = "https://mcla.us/teams?view_by=division&current_season_year=2024"
 	html_text = requests.get(url).text
 	soup = BeautifulSoup(html_text, 'lxml')
 
@@ -85,12 +85,14 @@ def get_d1_teams(update_db):
 	table_body = table.find("tbody")
 	rows = table_body.find_all("tr")
 
+	# So we can pair full names with abbr names
+	url_map = {} # img_url -> full_name
 
 	for row in rows:
-		name_tag = row.find("a")
+		a_tags = row.find_all("a")
+		name_tag = a_tags[0]
 		if name_tag:
-			team_name = name_tag.text.strip()
-			d1_mcla.add(team_name)
+			full_name = name_tag.text.strip()
 
 			if update_db:
 				img_tag = row.find("img")
@@ -99,7 +101,43 @@ def get_d1_teams(update_db):
 					response = requests.get(full_url, allow_redirects=True)
 					image_url = response.url.strip()
 
-					my_cursor.execute(insert_query, (team_name, 0, 0, 0.00, 0.00, "-", 1, image_url))
+					conf_tag = a_tags[1]
+					conf = conf_tag.text.strip()
+					if conf == "NON-MCLA" or conf == "CCLA": continue
+
+					url_map[image_url] = full_name
+					my_cursor.execute(insert_query, ("-", full_name, 0, 0, 0.00, 0.00, conf, 1, image_url))
+			
+
+	url = "https://mcla.us/standings/division/d1?current_season_year=2024"
+	html_text = requests.get(url).text
+	soup = BeautifulSoup(html_text, 'lxml')
+
+	update_query = '''
+					UPDATE teams
+					SET team_name = %s
+					WHERE full_name = %s;
+				'''
+
+	table = soup.find(id="teams-table")
+	table_body = table.find("tbody")
+	rows = table_body.find_all("tr")
+
+	if update_db:
+		for row in rows:
+			name_tag = row.find("a")
+			if name_tag:
+				team_name = name_tag.text.strip()
+				d1_mcla.add(team_name)
+
+				img_tag = row.find("img")
+				if img_tag:
+					full_url = img_tag.get("src")
+					response = requests.get(full_url, allow_redirects=True)
+					image_url = response.url.strip()
+					if image_url in url_map:
+						full_name = url_map[image_url]
+						my_cursor.execute(update_query, (team_name, full_name))
 
 
 	return d1_mcla
@@ -260,12 +298,17 @@ def calculate_schedule():
 
 def main():
 	d1_mcla = get_d1_teams(False)
+	print("Got teams")
 	populate_games(d1_mcla)
+	print("Got games")
 	update_records()
+	print("Updated records")
 	calculate_rank(d1_mcla)
+	print("Calculated rank")
 	calculate_schedule()
-	my_cursor.close()
+	print("Calculated schedule")
 	db_connection.commit()
+	my_cursor.close()
 	db_connection.close()
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 interface Props {
   rank: number;
   teamName: String;
+  fullName: String;
   wins: number;
   losses: number;
   rating: number;
@@ -14,16 +15,14 @@ interface Props {
 const Ranking = ({
   rank,
   teamName,
+  fullName,
   wins,
   losses,
   rating,
   schedule,
   logo_url,
 }: Props) => {
-  const team_url = `https://mcla.us/team/${teamName.replace(
-    " ",
-    "_"
-  )}/2024/schedule.html`;
+  const team_url = `https://mcla.us/teams/${fullName.replace(" ", "-")}/2024/schedule`;
   return (
     <ListGroup.Item className={rank % 2 === 0 ? "even" : "odd"}>
       <div className="team-info">
