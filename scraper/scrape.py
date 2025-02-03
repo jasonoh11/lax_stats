@@ -59,6 +59,34 @@ def populate_games(league_set):
 			if team1 in league_set and team2 in league_set and score1 + score2 != 0:
 				my_cursor.execute(insert_query, (team1, team2, score1, score2))
 
+	tourney_games = [
+		("Simon Fraser", "Texas", 4, 17),
+		("Northeastern", "Liberty", 6, 11),
+		("Michigan State", "BYU", 4, 19),
+		("Utah Valley", "Chapman", 7, 6),
+		("Tennessee", "San Diego State", 7, 11),
+		("Colorado", "UC Santa Barbara", 10, 11),
+		("Arizona State", "Virginia Tech", 12, 11),
+		("California", "Georgia Tech", 11, 12),
+
+		("UC Santa Barbara", "Texas", 15, 14),
+		("San Diego State", "BYU", 10, 15),
+		("Utah Valley", "Georgia Tech", 17, 14),
+		("Arizona State", "Liberty", 10, 11),
+
+		("Liberty", "BYU", 12, 20),
+		("Utah Valley", "UC Santa Barbara", 13, 12),
+
+		("Utah Valley", "BYU", 5, 13)
+	]
+
+	for game in tourney_games:
+		if game[0] not in league_set:
+			print(game[0])
+		if game[1] not in league_set:
+			print(game[1])
+		my_cursor.execute(insert_query, game)
+
 				
 
 
@@ -123,13 +151,13 @@ def get_d1_teams(update_db):
 	table_body = table.find("tbody")
 	rows = table_body.find_all("tr")
 
-	if update_db:
-		for row in rows:
-			name_tag = row.find("a")
-			if name_tag:
-				team_name = name_tag.text.strip()
-				d1_mcla.add(team_name)
-
+	for row in rows:
+		name_tag = row.find("a")
+		if name_tag:
+			team_name = name_tag.text.strip()
+			d1_mcla.add(team_name)
+			
+			if update_db:
 				img_tag = row.find("img")
 				if img_tag:
 					full_url = img_tag.get("src")
@@ -139,14 +167,13 @@ def get_d1_teams(update_db):
 						full_name = url_map[image_url]
 						my_cursor.execute(update_query, (team_name, full_name))
 
-
 	return d1_mcla
 
 	
 '''
 Read from games table to populate record field in teams table
 '''
-def update_records():
+def update_records(league_set):
 	update_win_query = """
 				UPDATE teams
 				SET wins = wins + 1
@@ -297,11 +324,11 @@ def calculate_schedule():
 
 
 def main():
-	d1_mcla = get_d1_teams(False)
+	d1_mcla = get_d1_teams(True)
 	print("Got teams")
 	populate_games(d1_mcla)
 	print("Got games")
-	update_records()
+	update_records(d1_mcla)
 	print("Updated records")
 	calculate_rank(d1_mcla)
 	print("Calculated rank")
