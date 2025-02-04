@@ -2,15 +2,16 @@ import "./RankingList.css";
 import Ranking from "./Ranking";
 import React, { useState, useEffect } from "react";
 import RankingHeader from "./RankingHeader";
-import ListGroup from 'react-bootstrap/ListGroup';
+import ListGroup from "react-bootstrap/ListGroup";
 
 const RankingList = () => {
   var [teams, setTeams] = useState([]);
   var [sortingCriteria, setSortingCriteria] = useState("Rating");
+  var [leagueID, setLeagueID] = useState(1);
 
   useEffect(() => {
-    const url = `http://localhost:3000/api/teams?sort_by=${sortingCriteria.toLowerCase()}`;
-    console.log(url)
+    const url = `http://localhost:3000/api/teams?sort_by=${sortingCriteria.toLowerCase()}&league_id=${leagueID}`;
+    console.log(url);
     fetch(url, { mode: "cors" })
       .then((res) => {
         return res.json();
@@ -21,31 +22,43 @@ const RankingList = () => {
       .catch((error) => {
         console.error("Fetch error:", error);
       });
-  }, [sortingCriteria]);
-
+  }, [sortingCriteria, leagueID]);
 
   const handleSortChange = (newSort: string) => {
     setSortingCriteria(newSort);
-  }
+  };
+
+  const handleLeagueChange = (newID: number) => {
+    setLeagueID(newID);
+  };
 
   return (
     <>
       <ListGroup>
-      <RankingHeader league="MCLA D1" title1="Record" title2="Rating" title3="Schedule" sortingCriteria={sortingCriteria} onSortChange={handleSortChange}/>
-      {teams.map((team, index) => (
-        <Ranking
-          key={index}
-          rank={index + 1}
-          teamName={team["team_name"]}
-          fullName={team["full_name"]}
-          wins={team["wins"]}
-          losses={team["losses"]}
-          rating={team["rating"]}
-          schedule={team["schedule"]}
-          logo_url={team["logo_url"]}
+        <RankingHeader
+          league="MCLA D1"
+          title1="Record"
+          title2="Rating"
+          title3="Schedule"
+          sortingCriteria={sortingCriteria}
+          onSortChange={handleSortChange}
+          leagueID={leagueID}
+          onLeagueChange={handleLeagueChange}
         />
-      ))}
-    </ListGroup>
+        {teams.map((team, index) => (
+          <Ranking
+            key={index}
+            rank={index + 1}
+            teamName={team["team_name"]}
+            fullName={team["full_name"]}
+            wins={team["wins"]}
+            losses={team["losses"]}
+            rating={team["rating"]}
+            schedule={team["schedule"]}
+            logo_url={team["logo_url"]}
+          />
+        ))}
+      </ListGroup>
     </>
   );
 };

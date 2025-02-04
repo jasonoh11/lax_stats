@@ -19,7 +19,6 @@ div.header-dropdowns{
 
 /* flex container */
 div.header-labels {
-	margin-top: 5px;
 	display: flex;  
 	width: 100%;
 }
@@ -28,6 +27,10 @@ div.header-labels {
 	/* background-color: lightblue; */
 	width: 20%;
 	min-width: 200px;
+}
+
+.league-title{
+
 }
 
 .stats-titles{

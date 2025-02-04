@@ -102,14 +102,18 @@ def get_d1_teams(update_db):
 				"""
 	
 	if update_db:
-		my_cursor.execute("TRUNCATE TABLE teams")
+		# my_cursor.execute("TRUNCATE TABLE teams")
+		# TEMP
+		my_cursor.execute("DELETE FROM teams WHERE league_id = 2")
 	
 
 	url = "https://mcla.us/teams?view_by=division&current_season_year=2024"
 	html_text = requests.get(url).text
 	soup = BeautifulSoup(html_text, 'lxml')
 
-	table = soup.find(id="teams-table")
+	tables = soup.find_all(id="teams-table")
+	# TEMP
+	table = tables[1]
 	table_body = table.find("tbody")
 	rows = table_body.find_all("tr")
 
@@ -131,13 +135,16 @@ def get_d1_teams(update_db):
 
 					conf_tag = a_tags[1]
 					conf = conf_tag.text.strip()
-					if conf == "NON-MCLA" or conf == "CCLA": continue
+					# TEMP
+					if conf == "NON-MCLA": continue
 
 					url_map[image_url] = full_name
-					my_cursor.execute(insert_query, ("-", full_name, 0, 0, 0.00, 0.00, conf, 1, image_url))
+					# TEMP
+					my_cursor.execute(insert_query, ("-", full_name, 0, 0, 0.00, 0.00, conf, 2, image_url))
 			
 
-	url = "https://mcla.us/standings/division/d1?current_season_year=2024"
+	# TEMP
+	url = "https://mcla.us/standings/division/d2?current_season_year=2024"
 	html_text = requests.get(url).text
 	soup = BeautifulSoup(html_text, 'lxml')
 
@@ -147,6 +154,7 @@ def get_d1_teams(update_db):
 					WHERE full_name = %s;
 				'''
 
+	# TEMP
 	table = soup.find(id="teams-table")
 	table_body = table.find("tbody")
 	rows = table_body.find_all("tr")
@@ -324,16 +332,20 @@ def calculate_schedule():
 
 
 def main():
+	'''
+	TODO: add d2 support
+	Get d2 games, update records, calculate rank
+	'''
 	d1_mcla = get_d1_teams(True)
 	print("Got teams")
-	populate_games(d1_mcla)
-	print("Got games")
-	update_records(d1_mcla)
-	print("Updated records")
-	calculate_rank(d1_mcla)
-	print("Calculated rank")
-	calculate_schedule()
-	print("Calculated schedule")
+	# populate_games(d1_mcla)
+	# print("Got games")
+	# update_records(d1_mcla)
+	# print("Updated records")
+	# calculate_rank(d1_mcla)
+	# print("Calculated rank")
+	# calculate_schedule()
+	# print("Calculated schedule")
 	db_connection.commit()
 	my_cursor.close()
 	db_connection.close()

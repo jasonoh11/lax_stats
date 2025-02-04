@@ -12,6 +12,8 @@ interface Props {
   title3: String;
   sortingCriteria: String;
   onSortChange: (newSort: String) => void;
+  leagueID: number;
+  onLeagueChange: (newID: number) => void;
 }
 
 const RankingHeader = ({
@@ -21,6 +23,8 @@ const RankingHeader = ({
   title3,
   sortingCriteria,
   onSortChange,
+  leagueID,
+  onLeagueChange,
 }: Props) => {
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll(
@@ -36,46 +40,54 @@ const RankingHeader = ({
     };
   }, []);
 
-  // var [selectedSort, setSort] = useState("Sort By")
+  let leagueMap = new Map<number, string>([
+    [1, "MCLA D1"],
+    [2, "MCLA D2"],
+  ]);
 
   return (
     <div className="list-group-item ranking-header">
-      {/* <div className="header-dropdowns border-bottom">
-        <Dropdown>
+      <div className="header-labels">
+        <Dropdown className="ranking-title">
           <Dropdown.Toggle
-            variant="outline-light"
-            id="dropdown-basic"
-            className="dropdown-toggle"
+            className="league-title"
             size="sm"
+            variant="outline-light"
+            id="dropdown-alert"
           >
-            <i className="bi bi-filter-left"></i>
-            {sortingCriteria}
+            {leagueMap.get(leagueID)}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item onClick={() => onSortChange("Rating")}>
-              Rating
+            <Dropdown.Item href="#/action-1" onClick={() => onLeagueChange(1)}>
+            {leagueMap.get(1)}
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => onSortChange("Schedule")}>
-              Schedule
+            <Dropdown.Item href="#/action-2" onClick={() => onLeagueChange(2)}>
+            {leagueMap.get(2)}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-      </div> */}
-      <div className="header-labels">
-        <div className="ranking-title">Team</div>
+        {/* <button onClick={() => onLeagueChange(leagueID == 2 ? 1 : 2)}>
+          {leagueID}
+        </button> */}
         <div className="stats-titles">
           <span>{title1}</span>
           <div>
             <i
-              className={"bi hover-effect bi-funnel" + (sortingCriteria == "Rating" ? "-fill" : "")}
+              className={
+                "bi hover-effect bi-funnel" +
+                (sortingCriteria == "Rating" ? "-fill" : "")
+              }
               onClick={() => onSortChange("Rating")}
             ></i>
             <span>{title2}</span>
           </div>
           <div>
             <i
-              className={"bi hover-effect bi-funnel" + (sortingCriteria == "Schedule" ? "-fill" : "")}
+              className={
+                "bi hover-effect bi-funnel" +
+                (sortingCriteria == "Schedule" ? "-fill" : "")
+              }
               onClick={() => onSortChange("Schedule")}
             ></i>
             <span>{title3}</span>
