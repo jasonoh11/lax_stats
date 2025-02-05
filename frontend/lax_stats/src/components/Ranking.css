@@ -16,7 +16,7 @@ div.list-group-item {
 .team-info {
 	display: flex; /* flex conatiner for rank, img, name*/
   width: 20%;
-  min-width: 200px;
+  min-width: 195px;
   /* background-color: lightblue; */
 }
 

@@ -36,12 +36,13 @@ def get_num_pages():
 '''
 Scrape scores and populate games table
 '''
-def populate_games(league_set):
+def populate_games(league_set, league_id):
 	insert_query = """
-				INSERT INTO games (team1, team2, score1, score2)
-				VALUES (%s, %s, %s, %s)
+				INSERT INTO games (team1, team2, score1, score2, league_id)
+				VALUES (%s, %s, %s, %s, %s)
 				"""
-	my_cursor.execute("TRUNCATE TABLE games")
+
+	my_cursor.execute(f"DELETE FROM games WHERE league_id = {league_id}")
 
 	for i in range(2, 17):
 
@@ -57,35 +58,36 @@ def populate_games(league_set):
 			score1 = int(scores[i].text.strip())
 			score2 = int(scores[i+1].text.strip())
 			if team1 in league_set and team2 in league_set and score1 + score2 != 0:
-				my_cursor.execute(insert_query, (team1, team2, score1, score2))
+				my_cursor.execute(insert_query, (team1, team2, score1, score2, league_id))
 
-	tourney_games = [
-		("Simon Fraser", "Texas", 4, 17),
-		("Northeastern", "Liberty", 6, 11),
-		("Michigan State", "BYU", 4, 19),
-		("Utah Valley", "Chapman", 7, 6),
-		("Tennessee", "San Diego State", 7, 11),
-		("Colorado", "UC Santa Barbara", 10, 11),
-		("Arizona State", "Virginia Tech", 12, 11),
-		("California", "Georgia Tech", 11, 12),
+	if league_id == 1:
+		tourney_games = [
+			("Simon Fraser", "Texas", 4, 17),
+			("Northeastern", "Liberty", 6, 11),
+			("Michigan State", "BYU", 4, 19),
+			("Utah Valley", "Chapman", 7, 6),
+			("Tennessee", "San Diego State", 7, 11),
+			("Colorado", "UC Santa Barbara", 10, 11),
+			("Arizona State", "Virginia Tech", 12, 11),
+			("California", "Georgia Tech", 11, 12),
 
-		("UC Santa Barbara", "Texas", 15, 14),
-		("San Diego State", "BYU", 10, 15),
-		("Utah Valley", "Georgia Tech", 17, 14),
-		("Arizona State", "Liberty", 10, 11),
+			("UC Santa Barbara", "Texas", 15, 14),
+			("San Diego State", "BYU", 10, 15),
+			("Utah Valley", "Georgia Tech", 17, 14),
+			("Arizona State", "Liberty", 10, 11),
 
-		("Liberty", "BYU", 12, 20),
-		("Utah Valley", "UC Santa Barbara", 13, 12),
+			("Liberty", "BYU", 12, 20),
+			("Utah Valley", "UC Santa Barbara", 13, 12),
 
-		("Utah Valley", "BYU", 5, 13)
-	]
+			("Utah Valley", "BYU", 5, 13)
+		]
 
-	for game in tourney_games:
-		if game[0] not in league_set:
-			print(game[0])
-		if game[1] not in league_set:
-			print(game[1])
-		my_cursor.execute(insert_query, game)
+		for game in tourney_games:
+			if game[0] not in league_set:
+				print(game[0])
+			if game[1] not in league_set:
+				print(game[1])
+			my_cursor.execute(insert_query, game + (league_id, ))
 
 				
 
@@ -93,8 +95,8 @@ def populate_games(league_set):
 '''
 Scrape the names and icons for d1 MCLA
 '''
-def get_d1_teams(update_db):
-	d1_mcla = set()
+def get_2024_teams(update_db, league_id):
+	league_set = set()
 
 	insert_query = """
 				INSERT INTO teams (team_name, full_name, wins, losses, rating, schedule, conference, league_id,  logo_url)
@@ -102,9 +104,13 @@ def get_d1_teams(update_db):
 				"""
 	
 	if update_db:
-		# my_cursor.execute("TRUNCATE TABLE teams")
+		# my_cursor.execute("ALTER TABLE teams AUTO_INCREMENT = 1")
+		# my_cursor.execute(f"DELETE FROM teams WHERE league_id = {league_id}")
 		# TEMP
-		my_cursor.execute("DELETE FROM teams WHERE league_id = 2")
+		if league_id == 1: 
+			my_cursor.execute("TRUNCATE TABLE teams")
+
+		
 	
 
 	url = "https://mcla.us/teams?view_by=division&current_season_year=2024"
@@ -112,8 +118,7 @@ def get_d1_teams(update_db):
 	soup = BeautifulSoup(html_text, 'lxml')
 
 	tables = soup.find_all(id="teams-table")
-	# TEMP
-	table = tables[1]
+	table = tables[league_id - 1]
 	table_body = table.find("tbody")
 	rows = table_body.find_all("tr")
 
@@ -130,21 +135,21 @@ def get_d1_teams(update_db):
 				img_tag = row.find("img")
 				if img_tag:
 					full_url = img_tag.get("src")
-					response = requests.get(full_url, allow_redirects=True)
+					response = requests.head(full_url, allow_redirects=True)
 					image_url = response.url.strip()
 
 					conf_tag = a_tags[1]
 					conf = conf_tag.text.strip()
-					# TEMP
+
 					if conf == "NON-MCLA": continue
 
 					url_map[image_url] = full_name
-					# TEMP
-					my_cursor.execute(insert_query, ("-", full_name, 0, 0, 0.00, 0.00, conf, 2, image_url))
+
+					my_cursor.execute(insert_query, ("-", full_name, 0, 0, 0.00, 0.00, conf, league_id, image_url))
 			
 
-	# TEMP
-	url = "https://mcla.us/standings/division/d2?current_season_year=2024"
+	url = f"https://mcla.us/standings/division/d{league_id}?current_season_year=2024"
+
 	html_text = requests.get(url).text
 	soup = BeautifulSoup(html_text, 'lxml')
 
@@ -153,8 +158,7 @@ def get_d1_teams(update_db):
 					SET team_name = %s
 					WHERE full_name = %s;
 				'''
-
-	# TEMP
+	
 	table = soup.find(id="teams-table")
 	table_body = table.find("tbody")
 	rows = table_body.find_all("tr")
@@ -163,25 +167,25 @@ def get_d1_teams(update_db):
 		name_tag = row.find("a")
 		if name_tag:
 			team_name = name_tag.text.strip()
-			d1_mcla.add(team_name)
+			league_set.add(team_name)
 			
 			if update_db:
 				img_tag = row.find("img")
 				if img_tag:
 					full_url = img_tag.get("src")
-					response = requests.get(full_url, allow_redirects=True)
+					response = requests.head(full_url, allow_redirects=True)
 					image_url = response.url.strip()
 					if image_url in url_map:
 						full_name = url_map[image_url]
 						my_cursor.execute(update_query, (team_name, full_name))
 
-	return d1_mcla
+	return league_set
 
 	
 '''
 Read from games table to populate record field in teams table
 '''
-def update_records(league_set):
+def update_records(league_set, league_id):
 	update_win_query = """
 				UPDATE teams
 				SET wins = wins + 1
@@ -193,11 +197,11 @@ def update_records(league_set):
 					WHERE team_name = %s;
 					"""
 	
-	my_cursor.execute("UPDATE teams SET wins = 0, losses = 0;")
-	my_cursor.execute("SELECT * FROM games")
+	my_cursor.execute(f"UPDATE teams SET wins = 0, losses = 0 WHERE league_id = {league_id};")
+	my_cursor.execute(f"SELECT * FROM games WHERE league_id = {league_id}")
 	games = my_cursor.fetchall()
 
-	for (id, team1, team2, score1, score2) in games:
+	for (id, team1, team2, score1, score2, league_id) in games:
 		if score1 > score2:
 			my_cursor.execute(update_win_query, (team1, ))
 			my_cursor.execute(update_loss_query, (team2, ))
@@ -205,14 +209,28 @@ def update_records(league_set):
 			my_cursor.execute(update_win_query, (team2, ))
 			my_cursor.execute(update_loss_query, (team1, ))
 
-
 	my_cursor.execute("DELETE FROM games WHERE team1 IN (SELECT team_name FROM teams WHERE (wins + losses) < 5) OR team2 IN (SELECT team_name FROM teams WHERE (wins + losses) < 5);")
 	my_cursor.execute("DELETE FROM teams WHERE (wins + losses) < 5;")
 
 
+	# # Delete games where either team has played < 5 games
+	# my_cursor.execute(f"""
+	# 	DELETE FROM games 
+	# 	WHERE team1 IN (SELECT team_name FROM teams WHERE league_id = {league_id} AND (wins + losses) < 5)
+	# 	OR team2 IN (SELECT team_name FROM teams WHERE league_id = {league_id} AND (wins + losses) < 5);
+	# """)
+
+	# # Delete teams that have played < 5 games
+	# my_cursor.execute(f"""
+	# 	DELETE FROM teams 
+	# 	WHERE league_id = {league_id} AND (wins + losses) < 5;
+	# """)
+
+
 	
-def calculate_rank(league):
-	my_cursor.execute("SELECT * FROM games")
+def calculate_rank(league, league_id):
+	# TEMP
+	my_cursor.execute(f"SELECT * FROM games WHERE league_id = {league_id}")
 	games = my_cursor.fetchall()
 	ids = {} # map teams to their id
 	for i, n in enumerate(league):
@@ -222,7 +240,7 @@ def calculate_rank(league):
 
 	adj_matrix = np.zeros((num_teams, num_teams))
 
-	for (_, team1, team2, score1, score2) in games:
+	for (_, team1, team2, score1, score2, league_id) in games:
 		# loser = team1 if score1 < score2 else team2
 		# winner = team1 if score1 > score2 else team2
 		# margin = abs(score1 - score2)
@@ -278,13 +296,14 @@ def calculate_rank(league):
 		rating = float(scaled_ratings[id].item())
 		my_cursor.execute(update_rating_query, (rating, team))
 
-def calculate_schedule():
+def calculate_schedule(league_id):
 
 	# init map to store team -> (games played, aggregate rating of opponenets)
 	aggregate_opp_rating = {}
 
 	# get entries of games
-	my_cursor.execute("SELECT * FROM games")
+	# TEMP
+	my_cursor.execute(f"SELECT * FROM games WHERE league_id = {league_id}")
 	games = my_cursor.fetchall()
 
 	# for each game, get the rating of each team
@@ -295,7 +314,7 @@ def calculate_schedule():
 				WHERE team_name = %s;
 				"""
 	
-	for (_, team1, team2, score1, score2) in games:
+	for (_, team1, team2, score1, score2, league_id) in games:
 
 		my_cursor.execute(get_rating_query, (team1, ))
 		team1_rating = my_cursor.fetchone()[0]
@@ -336,15 +355,19 @@ def main():
 	TODO: add d2 support
 	Get d2 games, update records, calculate rank
 	'''
-	d1_mcla = get_d1_teams(True)
-	print("Got teams")
-	# populate_games(d1_mcla)
-	# print("Got games")
-	# update_records(d1_mcla)
-	# print("Updated records")
-	# calculate_rank(d1_mcla)
+	# d1_2024 = get_2024_teams(False, 1)
+	# print(d1_2024)
+	# populate_games(d1_2024, 1)
+	# update_records(d1_2024, 1)
+	# calculate_rank(d1_2024, 1)
+	# calculate_schedule(1)
+
+	d2_2024 = get_2024_teams(False, 2)
+	# populate_games(d2_2024, 2)
+	# update_records(d2_2024, 2)
+	calculate_rank(d2_2024, 2)
+	calculate_schedule(2)
 	# print("Calculated rank")
-	# calculate_schedule()
 	# print("Calculated schedule")
 	db_connection.commit()
 	my_cursor.close()
