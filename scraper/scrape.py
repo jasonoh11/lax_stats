@@ -21,19 +21,6 @@ my_cursor = db_connection.cursor()
 
 
 '''
-Scrape the number of pages in the schedule
-Helper for populate_games
-'''
-def get_num_pages():
-	url = 'https://mcla.us/schedule/2024/'
-	html_text = requests.get(url).text
-	soup = BeautifulSoup(html_text, 'lxml')
-
-	pagination = soup.find("ul", class_="pagination")
-	return int((pagination.find_all("li"))[-2].a.text)
-
-
-'''
 Scrape scores and populate games table
 '''
 def populate_games(league_set, league_id):
@@ -89,7 +76,69 @@ def populate_games(league_set, league_id):
 				print(game[1])
 			my_cursor.execute(insert_query, game + (league_id, ))
 
-				
+
+def get_final_image_url(img_tag):
+    full_url = img_tag.get("src")
+    response = requests.head(full_url, allow_redirects=True)
+    return response.url.strip()
+
+def scrape_teams(year, division):
+	teams = []
+
+	url = f"https://mcla.us/teams?view_by=division&current_season_year={year}"
+	html_text = requests.get(url).text
+	soup = BeautifulSoup(html_text, 'lxml')
+
+	tables = soup.find_all(id="teams-table")
+	table = tables[division - 1]
+	table_body = table.find("tbody")
+	rows = table_body.find_all("tr")
+
+	url_map = {} # url -> index in teams
+
+	i = 0
+	for row in rows:
+		a_tags = row.find_all("a")
+		name_tag = a_tags[0]
+		if name_tag:
+			full_name = name_tag.text.strip()
+
+			conf_tag = a_tags[1]
+			if conf_tag:
+				conf = conf_tag.text.strip()
+				if conf == "NON-MCLA": continue
+				if division == 1 and conf == "CCLA": continue # not real
+
+				img_tag = row.find("img")
+				if img_tag:
+					image_url = get_final_image_url(img_tag)
+
+					url_map[image_url] = i
+					teams.append([full_name, conf, image_url])
+					i += 1
+
+	url = f"https://mcla.us/standings/division/d{division}?current_season_year={year}"
+
+	html_text = requests.get(url).text
+	soup = BeautifulSoup(html_text, 'lxml')
+
+	table = soup.find(id="teams-table")
+	table_body = table.find("tbody")
+	rows = table_body.find_all("tr")
+
+	for row in rows:
+		name_tag = row.find("a")
+		if name_tag:
+			abbr_name = name_tag.text.strip()
+			
+			img_tag = row.find("img")
+			if img_tag:
+				image_url = get_final_image_url(img_tag)
+				if image_url in url_map:
+					teams[url_map[image_url]].append(abbr_name)
+
+	return teams
+
 
 
 '''
