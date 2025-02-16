@@ -9,6 +9,7 @@ interface Props {
   losses: number;
   rating: number;
   schedule: number;
+  year: number
   logo_url: string;
 }
 
@@ -20,9 +21,10 @@ const Ranking = ({
   losses,
   rating,
   schedule,
+  year,
   logo_url,
 }: Props) => {
-  const team_url = `https://mcla.us/teams/${fullName.replace(" ", "-")}/2024/schedule`;
+  const team_url = `https://mcla.us/teams/${fullName.replace(" ", "-")}/${year}/schedule`;
   return (
     <ListGroup.Item className={rank % 2 === 0 ? "even" : "odd"}>
       <div className="team-info">

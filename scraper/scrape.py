@@ -20,8 +20,10 @@ def scrape_games(league_set, year, num_weeks):
 		for i in range(0, len(teams), 2):
 			team1 = teams[i].text.strip()
 			team2 = teams[i+1].text.strip()
-			score1 = int(scores[i].text.strip())
-			score2 = int(scores[i+1].text.strip())
+			score1_text = scores[i].text.strip()
+			score2_text = scores[i+1].text.strip()
+			score1 = 0 if score1_text == '' else int(scores[i].text.strip())
+			score2 = 0 if score2_text == '' else int(scores[i+1].text.strip())
 			if team1 in league_set and team2 in league_set and score1 + score2 != 0:
 				games.append([team1, team2, score1, score2])
 

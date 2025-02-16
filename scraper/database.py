@@ -8,16 +8,16 @@ import os
 '''
 Add team info to database for a league
 '''
-def populate_teams(league, division, league_id):
+def populate_teams(league, division, league_id, year):
 	my_cursor = db_connection.cursor()
 	insert_query = """
-				INSERT INTO teams (team_name, full_name, wins, losses, rating, schedule, conference, division, league_id,  logo_url)
-				VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+				INSERT INTO teams (team_name, full_name, wins, losses, rating, schedule, conference, division, year, league_id,  logo_url)
+				VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 				"""
 	
 	for team in league:
 		if len(team) < 4: team.append("-")
-		my_cursor.execute(insert_query, (team[3], team[0], 0, 0, 0.0, 0.0, team[1], division, league_id, team[2]))
+		my_cursor.execute(insert_query, (team[3], team[0], 0, 0, 0.0, 0.0, team[1], division, year, league_id, team[2]))
 
 	db_connection.commit()
 	my_cursor.close()
@@ -35,12 +35,14 @@ def populate_games(league_set, games, division, league_id, min_games):
 	update_win_query = """
 				UPDATE teams
 				SET wins = %s
-				WHERE team_name = %s;
+				WHERE team_name = %s
+				AND league_id = %s;
 				"""
 	update_loss_query = """
 					UPDATE teams
 					SET losses = %s
-					WHERE team_name = %s;
+					WHERE team_name = %s
+					AND league_id = %s;
 					"""
 
 
@@ -58,14 +60,14 @@ def populate_games(league_set, games, division, league_id, min_games):
 
 	for team, (wins, losses) in record_map.items():
 		print(team, wins, losses)
-		my_cursor.execute(update_win_query, (wins, team))
-		my_cursor.execute(update_loss_query, (losses, team))
+		my_cursor.execute(update_win_query, (wins, team, league_id))
+		my_cursor.execute(update_loss_query, (losses, team, league_id))
 
 
 	# Discard teams that played under min_games games
 
-	my_cursor.execute(f"DELETE FROM games WHERE team1 IN (SELECT team_name FROM teams WHERE (wins + losses) < {min_games}) OR team2 IN (SELECT team_name FROM teams WHERE (wins + losses) < {min_games});")
-	my_cursor.execute("DELETE FROM teams WHERE (wins + losses) < {min_games};")
+	my_cursor.execute(f"DELETE FROM games WHERE team1 IN (SELECT team_name FROM teams WHERE (wins + losses) < {min_games} AND league_id = {league_id}) OR team2 IN (SELECT team_name FROM teams WHERE (wins + losses) < {min_games} AND league_id = {league_id}) AND league_id = {league_id};")
+	my_cursor.execute(f"DELETE FROM teams WHERE (wins + losses) < {min_games} AND league_id = {league_id};")
 
 	db_connection.commit()
 	my_cursor.close()
@@ -90,23 +92,25 @@ def populate_rank(league, league_id):
 	update_rating_query = """
 				UPDATE teams
 				SET rating = %s
-				WHERE team_name = %s;
+				WHERE team_name = %s
+				AND league_id = %s;
 				"""
 	
 	for (team, rating) in team_ratings.items():
-		my_cursor.execute(update_rating_query, (rating, team))
+		my_cursor.execute(update_rating_query, (rating, team, league_id))
 
 
 	insert_schedule_query = """
 				UPDATE teams
 				SET schedule = %s
 				WHERE team_name = %s
+				AND league_id = %s;
 				"""
 	
 	schedule_ratings = rank.calculate_schedule(team_ratings, games)
 
 	for (team, schedule_rating) in schedule_ratings.items():
-		my_cursor.execute(insert_schedule_query, (schedule_rating, team))
+		my_cursor.execute(insert_schedule_query, (schedule_rating, team, league_id))
 
 
 	db_connection.commit()
@@ -123,43 +127,49 @@ db_connection = mysql.connector.connect(
 )
 
 
-# d1_2024 = scrape.scrape_team_info(2024, 1)
-# populate_teams(d1_2024, 1, 1)
+d1_2024 = scrape.scrape_team_info(2024, 1)
+populate_teams(d1_2024, 1, 1, 2024)
 
 d1_2024 = scrape.scrape_teams(2024, 1)
+d1_2024_games = scrape.scrape_games(d1_2024, 2024, 16)
+tourney_games = [
+			("Simon Fraser", "Texas", 4, 17),
+			("Northeastern", "Liberty", 6, 11),
+			("Michigan State", "Brigham Young", 4, 19),
+			("Utah Valley", "Chapman", 7, 6),
+			("Tennessee", "San Diego State", 7, 11),
+			("Colorado", "UC Santa Barbara", 10, 11),
+			("Arizona State", "Virginia Tech", 12, 11),
+			("California", "Georgia Tech", 11, 12),
 
-# d1_2024_games = scrape.scrape_games(d1_2024, 2024, 16)
-# tourney_games = [
-# 			("Simon Fraser", "Texas", 4, 17),
-# 			("Northeastern", "Liberty", 6, 11),
-# 			("Michigan State", "Brigham Young", 4, 19),
-# 			("Utah Valley", "Chapman", 7, 6),
-# 			("Tennessee", "San Diego State", 7, 11),
-# 			("Colorado", "UC Santa Barbara", 10, 11),
-# 			("Arizona State", "Virginia Tech", 12, 11),
-# 			("California", "Georgia Tech", 11, 12),
+			("UC Santa Barbara", "Texas", 15, 14),
+			("San Diego State", "Brigham Young", 10, 15),
+			("Utah Valley", "Georgia Tech", 17, 14),
+			("Arizona State", "Liberty", 10, 11),
 
-# 			("UC Santa Barbara", "Texas", 15, 14),
-# 			("San Diego State", "Brigham Young", 10, 15),
-# 			("Utah Valley", "Georgia Tech", 17, 14),
-# 			("Arizona State", "Liberty", 10, 11),
+			("Liberty", "Brigham Young", 12, 20),
+			("Utah Valley", "UC Santa Barbara", 13, 12),
 
-# 			("Liberty", "Brigham Young", 12, 20),
-# 			("Utah Valley", "UC Santa Barbara", 13, 12),
-
-# 			("Utah Valley", "Brigham Young", 5, 13)
-# 		]
-# total_games = d1_2024_games + tourney_games
-# populate_games(d1_2024, total_games, 1, 1, 5)
+			("Utah Valley", "Brigham Young", 5, 13)
+		]
+total_games = d1_2024_games + tourney_games
+populate_games(d1_2024, total_games, 1, 1, 5)
 populate_rank(d1_2024, 1)
 
-# d2_2024 = scrape.scrape_team_info(2024, 2)
-# populate_teams(d2_2024, 2, 2)
+d2_2024 = scrape.scrape_team_info(2024, 2)
+populate_teams(d2_2024, 2, 2, 2024)
 
 d2_2024 = scrape.scrape_teams(2024, 2)
-# d2_2024_games = scrape.scrape_games(d2_2024, 2024, 16)
-# populate_games(d2_2024, d2_2024_games, 2, 2, 5)
+d2_2024_games = scrape.scrape_games(d2_2024, 2024, 16)
+populate_games(d2_2024, d2_2024_games, 2, 2, 5)
 populate_rank(d2_2024, 2)
+
+d1_2025 = scrape.scrape_team_info(2025, 1)
+populate_teams(d1_2025, 1, 3, 2025)
+d1_2025 = scrape.scrape_teams(2025, 1)
+d1_2025_games = scrape.scrape_games(d1_2025, 2025, 5)
+populate_games(d1_2025, d1_2025_games + [("California", "Texas", 7, 20)], 1, 3, 1)
+populate_rank(d1_2025, 3)
 
 
 

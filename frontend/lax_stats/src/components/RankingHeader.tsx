@@ -41,8 +41,9 @@ const RankingHeader = ({
   }, []);
 
   let leagueMap = new Map<number, string>([
-    [1, "MCLA D1"],
-    [2, "MCLA D2"],
+    [1, "MCLA D1 - 2024"],
+    [2, "MCLA D2 - 2024"],
+    [3, "MCLA D1 - 2025"]
   ]);
 
   return (
@@ -64,6 +65,9 @@ const RankingHeader = ({
             </Dropdown.Item>
             <Dropdown.Item href="#/action-2" onClick={() => onLeagueChange(2)}>
             {leagueMap.get(2)}
+            </Dropdown.Item>
+            <Dropdown.Item href="#/action-2" onClick={() => onLeagueChange(3)}>
+            {leagueMap.get(3)}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

@@ -7,16 +7,16 @@ def calculate_rank(games, ids):
 	adj_matrix = np.zeros((num_teams, num_teams))
 
 	for (_, team1, team2, score1, score2, division, league_id) in games:
-		# loser = team1 if score1 < score2 else team2
-		# winner = team1 if score1 > score2 else team2
-		# margin = abs(score1 - score2)
+		loser = team1 if score1 < score2 else team2
+		winner = team1 if score1 > score2 else team2
+		margin = abs(score1 - score2)
 
-		# adj_matrix[ids[loser], ids[winner]] = margin
+		adj_matrix[ids[loser], ids[winner]] = margin
 
-		total = score1 + score2
+		# total = score1 + score2
 
-		adj_matrix[ids[team1], ids[team2]] = score2 + 1 / total + 2
-		adj_matrix[ids[team2], ids[team1]] = score1 + 1 / total + 2
+		# adj_matrix[ids[team1], ids[team2]] = score2 + 1 / total + 2
+		# adj_matrix[ids[team2], ids[team1]] = score1 + 1 / total + 2
 
 	
 
