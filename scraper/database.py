@@ -127,8 +127,8 @@ db_connection = mysql.connector.connect(
 )
 
 
-d1_2024 = scrape.scrape_team_info(2024, 1)
-populate_teams(d1_2024, 1, 1, 2024)
+# d1_2024 = scrape.scrape_team_info(2024, 1)
+# populate_teams(d1_2024, 1, 1, 2024)
 
 d1_2024 = scrape.scrape_teams(2024, 1)
 d1_2024_games = scrape.scrape_games(d1_2024, 2024, 16)
@@ -156,19 +156,19 @@ total_games = d1_2024_games + tourney_games
 populate_games(d1_2024, total_games, 1, 1, 5)
 populate_rank(d1_2024, 1)
 
-d2_2024 = scrape.scrape_team_info(2024, 2)
-populate_teams(d2_2024, 2, 2, 2024)
+# d2_2024 = scrape.scrape_team_info(2024, 2)
+# populate_teams(d2_2024, 2, 2, 2024)
 
 d2_2024 = scrape.scrape_teams(2024, 2)
 d2_2024_games = scrape.scrape_games(d2_2024, 2024, 16)
 populate_games(d2_2024, d2_2024_games, 2, 2, 5)
 populate_rank(d2_2024, 2)
 
-d1_2025 = scrape.scrape_team_info(2025, 1)
-populate_teams(d1_2025, 1, 3, 2025)
+# d1_2025 = scrape.scrape_team_info(2025, 1)
+# populate_teams(d1_2025, 1, 3, 2025)
 d1_2025 = scrape.scrape_teams(2025, 1)
 d1_2025_games = scrape.scrape_games(d1_2025, 2025, 5)
-populate_games(d1_2025, d1_2025_games + [("California", "Texas", 7, 20)], 1, 3, 1)
+populate_games(d1_2025, d1_2025_games, 1, 3, 1)
 populate_rank(d1_2025, 3)
 
 
