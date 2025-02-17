@@ -60,13 +60,13 @@ const RankingHeader = ({
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1" onClick={() => onLeagueChange(1)}>
+            <Dropdown.Item onClick={() => onLeagueChange(1)}>
             {leagueMap.get(1)}
             </Dropdown.Item>
-            <Dropdown.Item href="#/action-2" onClick={() => onLeagueChange(2)}>
+            <Dropdown.Item onClick={() => onLeagueChange(2)}>
             {leagueMap.get(2)}
             </Dropdown.Item>
-            <Dropdown.Item href="#/action-2" onClick={() => onLeagueChange(3)}>
+            <Dropdown.Item onClick={() => onLeagueChange(3)}>
             {leagueMap.get(3)}
             </Dropdown.Item>
           </Dropdown.Menu>

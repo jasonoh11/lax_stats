@@ -11,7 +11,7 @@ Add team info to database for a league
 def populate_teams(league, division, league_id, year):
 	my_cursor = db_connection.cursor()
 	insert_query = """
-				INSERT INTO teams (team_name, full_name, wins, losses, rating, schedule, conference, division, year, league_id,  logo_url)
+				INSERT INTO teams (team_name, url_name, wins, losses, rating, schedule, conference, division, year, league_id,  logo_url)
 				VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 				"""
 	
@@ -164,8 +164,10 @@ d2_2024_games = scrape.scrape_games(d2_2024, 2024, 16)
 populate_games(d2_2024, d2_2024_games, 2, 2, 5)
 populate_rank(d2_2024, 2)
 
+
 # d1_2025 = scrape.scrape_team_info(2025, 1)
 # populate_teams(d1_2025, 1, 3, 2025)
+
 d1_2025 = scrape.scrape_teams(2025, 1)
 d1_2025_games = scrape.scrape_games(d1_2025, 2025, 5)
 populate_games(d1_2025, d1_2025_games, 1, 3, 1)

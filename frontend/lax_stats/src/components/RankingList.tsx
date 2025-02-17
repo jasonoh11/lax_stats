@@ -50,7 +50,7 @@ const RankingList = () => {
             key={index}
             rank={index + 1}
             teamName={team["team_name"]}
-            fullName={team["full_name"]}
+            urlName={team["url_name"]}
             wins={team["wins"]}
             losses={team["losses"]}
             rating={team["rating"]}
