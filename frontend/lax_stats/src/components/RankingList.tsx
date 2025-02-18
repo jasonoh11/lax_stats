@@ -11,8 +11,9 @@ const RankingList = () => {
   var [year, setYear] = useState(2024);
 
   useEffect(() => {
-    const url = `http://localhost:3000/api/teams?sort_by=${sortingCriteria.toLowerCase()}&division=${division}&year=${year}`;
-    console.log(url);
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const url = `${apiUrl}/api/teams?sort_by=${sortingCriteria.toLowerCase()}&division=${division}&year=${year}`;
+    
     fetch(url, { mode: "cors" })
       .then((res) => {
         return res.json();
