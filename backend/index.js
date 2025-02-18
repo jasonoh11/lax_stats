@@ -47,15 +47,17 @@ app.get('/api/games/:team', (req, res) => {
 });
 
 app.get('/api/teams', (req, res) => {
-	const league_id = parseInt(req.query.league_id, 10);
+	const division = parseInt(req.query.division, 10);
+	const year = parseInt(req.query.year, 10);
 	const sort_by = req.query.sort_by;
 
 	const allowedSortFields = ["rating", "schedule"];
 	if (!allowedSortFields.includes(sort_by)) {
 		return res.status(400).json({ error: "Invalid sorting criteria" });
 	}
+	// console.log("Fetching teams with id: " + league_id);
 
-	var query = `SELECT * FROM teams WHERE league_id = ${league_id} ORDER BY ${sort_by} DESC`;
+	var query = `SELECT * FROM teams WHERE division = ${division} AND year = ${year} ORDER BY ${sort_by} DESC`;
 	db.query(query, (err, result, fields) => {
 		if (err) {
 			res.status(500).send('Database query failed');

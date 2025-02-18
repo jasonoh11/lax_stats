@@ -49,7 +49,6 @@ def populate_games(league_set, games, division, league_id, min_games):
 	record_map = {key: [0, 0] for key in league_set}
 
 	for (team1, team2, score1, score2) in games:
-		print(team1, team2)
 		my_cursor.execute(insert_query, (team1, team2, score1, score2, division, league_id))
 		if score1 > score2:
 			record_map.get(team1)[0] += 1
@@ -58,8 +57,16 @@ def populate_games(league_set, games, division, league_id, min_games):
 			record_map.get(team1)[1] += 1
 			record_map.get(team2)[0] += 1
 
+	# win_data = [(wins, team, league_id) for team, (wins, losses) in record_map.items()]
+	# loss_data = [(losses, team, league_id) for team, (wins, losses) in record_map.items()]
+
+	# my_cursor.executemany(update_win_query, win_data)
+	# my_cursor.executemany(update_loss_query, loss_data)
+			
+	# TODO - test this
+
+
 	for team, (wins, losses) in record_map.items():
-		print(team, wins, losses)
 		my_cursor.execute(update_win_query, (wins, team, league_id))
 		my_cursor.execute(update_loss_query, (losses, team, league_id))
 
@@ -130,43 +137,50 @@ db_connection = mysql.connector.connect(
 # d1_2024 = scrape.scrape_team_info(2024, 1)
 # populate_teams(d1_2024, 1, 1, 2024)
 
-d1_2024 = scrape.scrape_teams(2024, 1)
-d1_2024_games = scrape.scrape_games(d1_2024, 2024, 16)
-tourney_games = [
-			("Simon Fraser", "Texas", 4, 17),
-			("Northeastern", "Liberty", 6, 11),
-			("Michigan State", "Brigham Young", 4, 19),
-			("Utah Valley", "Chapman", 7, 6),
-			("Tennessee", "San Diego State", 7, 11),
-			("Colorado", "UC Santa Barbara", 10, 11),
-			("Arizona State", "Virginia Tech", 12, 11),
-			("California", "Georgia Tech", 11, 12),
+# d1_2024 = scrape.scrape_teams(2024, 1)
+# d1_2024_games = scrape.scrape_games(d1_2024, 2024, 16)
+# tourney_games = [
+# 			("Simon Fraser", "Texas", 4, 17),
+# 			("Northeastern", "Liberty", 6, 11),
+# 			("Michigan State", "Brigham Young", 4, 19),
+# 			("Utah Valley", "Chapman", 7, 6),
+# 			("Tennessee", "San Diego State", 7, 11),
+# 			("Colorado", "UC Santa Barbara", 10, 11),
+# 			("Arizona State", "Virginia Tech", 12, 11),
+# 			("California", "Georgia Tech", 11, 12),
 
-			("UC Santa Barbara", "Texas", 15, 14),
-			("San Diego State", "Brigham Young", 10, 15),
-			("Utah Valley", "Georgia Tech", 17, 14),
-			("Arizona State", "Liberty", 10, 11),
+# 			("UC Santa Barbara", "Texas", 15, 14),
+# 			("San Diego State", "Brigham Young", 10, 15),
+# 			("Utah Valley", "Georgia Tech", 17, 14),
+# 			("Arizona State", "Liberty", 10, 11),
 
-			("Liberty", "Brigham Young", 12, 20),
-			("Utah Valley", "UC Santa Barbara", 13, 12),
+# 			("Liberty", "Brigham Young", 12, 20),
+# 			("Utah Valley", "UC Santa Barbara", 13, 12),
 
-			("Utah Valley", "Brigham Young", 5, 13)
-		]
-total_games = d1_2024_games + tourney_games
-populate_games(d1_2024, total_games, 1, 1, 5)
-populate_rank(d1_2024, 1)
+# 			("Utah Valley", "Brigham Young", 5, 13)
+# 		]
+# total_games = d1_2024_games + tourney_games
+# populate_games(d1_2024, total_games, 1, 1, 5)
+# populate_rank(d1_2024, 1)
+# print("Done w d1")
 
-# d2_2024 = scrape.scrape_team_info(2024, 2)
-# populate_teams(d2_2024, 2, 2, 2024)
+print("starting")
+d2_2024 = scrape.scrape_team_info(2024, 2)
+print("got teams")
+populate_teams(d2_2024, 2, 2, 2024)
+print("pop teams")
 
 d2_2024 = scrape.scrape_teams(2024, 2)
+print("got teams again")
 d2_2024_games = scrape.scrape_games(d2_2024, 2024, 16)
+print("got games")
 populate_games(d2_2024, d2_2024_games, 2, 2, 5)
+print("pop games")
 populate_rank(d2_2024, 2)
+print("Done w d2")
 
-
-# d1_2025 = scrape.scrape_team_info(2025, 1)
-# populate_teams(d1_2025, 1, 3, 2025)
+d1_2025 = scrape.scrape_team_info(2025, 1)
+populate_teams(d1_2025, 1, 3, 2025)
 
 d1_2025 = scrape.scrape_teams(2025, 1)
 d1_2025_games = scrape.scrape_games(d1_2025, 2025, 5)

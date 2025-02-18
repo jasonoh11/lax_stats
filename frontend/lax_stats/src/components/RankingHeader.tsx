@@ -3,7 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import React, { useState, useEffect } from "react";
 import { Tooltip } from "bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
+import { Dropdown, DropdownButton, Container } from "react-bootstrap";
+
+const divisions = [1, 2];
+const years = [2025, 2024];
 
 interface Props {
   league: String;
@@ -12,8 +15,10 @@ interface Props {
   title3: String;
   sortingCriteria: String;
   onSortChange: (newSort: String) => void;
-  leagueID: number;
-  onLeagueChange: (newID: number) => void;
+  division: number;
+  onDivisionChange: (newDivision: number) => void;
+  year: number;
+  onYearChange: (newYear: number) => void;
 }
 
 const RankingHeader = ({
@@ -23,8 +28,10 @@ const RankingHeader = ({
   title3,
   sortingCriteria,
   onSortChange,
-  leagueID,
-  onLeagueChange,
+  division,
+  onDivisionChange,
+  year,
+  onYearChange,
 }: Props) => {
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll(
@@ -40,40 +47,44 @@ const RankingHeader = ({
     };
   }, []);
 
-  let leagueMap = new Map<number, string>([
-    [1, "MCLA D1 - 2024"],
-    [2, "MCLA D2 - 2024"],
-    [3, "MCLA D1 - 2025"]
-  ]);
+
+  const [selected, setSelected] = useState(`MCLA D${division} - ${year}`);
+
+  const handleSelect = (division: number, year: number) => {
+    setSelected(`MCLA D${division} - ${year}`);
+    onDivisionChange(division);
+    onYearChange(year);
+  };
 
   return (
     <div className="list-group-item ranking-header">
       <div className="header-labels">
-        <Dropdown className="ranking-title">
-          <Dropdown.Toggle
-            className="league-title"
-            size="sm"
-            variant="outline-light"
-            id="dropdown-alert"
-          >
-            {leagueMap.get(leagueID)}
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={() => onLeagueChange(1)}>
-            {leagueMap.get(1)}
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => onLeagueChange(2)}>
-            {leagueMap.get(2)}
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => onLeagueChange(3)}>
-            {leagueMap.get(3)}
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        {/* <button onClick={() => onLeagueChange(leagueID == 2 ? 1 : 2)}>
-          {leagueID}
-        </button> */}
+        <DropdownButton
+          title={selected}
+          size="sm"
+          variant="outline-light"
+          className="ranking-title"
+          // onSelect gets the combined eventKey, then splits it into division and year.
+          onSelect={(eventKey) => {
+            const [division, year] = eventKey.split(" ");
+            handleSelect(division, year);
+          }}
+        >
+          {years.map((year) => (
+            <React.Fragment key={year}>
+              <Dropdown.Header>{year}</Dropdown.Header>
+              {divisions.map((division) => (
+                <Dropdown.Item
+                  key={`${division}-${year}`}
+                  eventKey={`${division} ${year}`}
+                >
+                  {`Division ${division}`}
+                </Dropdown.Item>
+              ))}
+              <Dropdown.Divider />
+            </React.Fragment>
+          ))}
+        </DropdownButton>
         <div className="stats-titles">
           <span>{title1}</span>
           <div>

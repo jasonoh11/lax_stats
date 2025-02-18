@@ -7,10 +7,11 @@ import ListGroup from "react-bootstrap/ListGroup";
 const RankingList = () => {
   var [teams, setTeams] = useState([]);
   var [sortingCriteria, setSortingCriteria] = useState("Rating");
-  var [leagueID, setLeagueID] = useState(1);
+  var [division, setDivision] = useState(1);
+  var [year, setYear] = useState(2024);
 
   useEffect(() => {
-    const url = `http://localhost:3000/api/teams?sort_by=${sortingCriteria.toLowerCase()}&league_id=${leagueID}`;
+    const url = `http://localhost:3000/api/teams?sort_by=${sortingCriteria.toLowerCase()}&division=${division}&year=${year}`;
     console.log(url);
     fetch(url, { mode: "cors" })
       .then((res) => {
@@ -22,15 +23,19 @@ const RankingList = () => {
       .catch((error) => {
         console.error("Fetch error:", error);
       });
-  }, [sortingCriteria, leagueID]);
+  }, [sortingCriteria, division, year]);
 
   const handleSortChange = (newSort: string) => {
     setSortingCriteria(newSort);
   };
 
-  const handleLeagueChange = (newID: number) => {
-    setLeagueID(newID);
-  };
+  const handleDivisionChange = (newDivision: number) => {
+    setDivision(newDivision);
+  }
+
+  const handleYearChange = (newYear: number) => {
+    setYear(newYear);
+  }
 
   return (
     <>
@@ -42,8 +47,10 @@ const RankingList = () => {
           title3="Schedule"
           sortingCriteria={sortingCriteria}
           onSortChange={handleSortChange}
-          leagueID={leagueID}
-          onLeagueChange={handleLeagueChange}
+          division={division}
+          onDivisionChange={handleDivisionChange}
+          year={year}
+          onYearChange={handleYearChange}
         />
         {teams.map((team, index) => (
           <Ranking
