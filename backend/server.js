@@ -72,7 +72,6 @@ app.get("/", (req, res) => {
 	res.send("Hello, lax_stats user!");
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-	console.log(`Listening on port ${port}...`);
+app.listen(3000, '0.0.0.0', () => {
+	console.log(`Listening on port 3000...`);
 });
