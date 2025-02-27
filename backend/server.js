@@ -69,7 +69,7 @@ app.get('/api/teams', (req, res) => {
 });
 
 app.get("/", (req, res) => {
-	res.send("Hello, lax_stats user! New backend update yay!");
+	res.send("Hello, lax_stats user! New backend update again");
 });
 
 app.listen(3000, '0.0.0.0', () => {
