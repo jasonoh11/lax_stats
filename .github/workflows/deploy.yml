@@ -32,7 +32,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          mask-password: false 
+          mask-password: true
 
       - name: Build and push Docker image
         env:
@@ -42,5 +42,21 @@ jobs:
           docker push $ECR_URL:$GITHUB_SHA
 
       - name: Update ECS task definition
+        env:
+          ECR_URL: ${{ secrets.AWS_ECR_URL }}
         run: |
-          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
+          # Get current task definition
+          aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION \
+          --query taskDefinition > task-definition.json
+          
+          # Remove unnecessary fields
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-definition.json > new-task-definition.json
+          
+          # Update image in container definition
+          jq --arg IMAGE "$ECR_URL:$GITHUB_SHA" '.containerDefinitions[0].image = $IMAGE' new-task-definition.json > updated-task-definition.json
+          
+          # Register new task definition
+          NEW_TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://updated-task-definition.json --query 'taskDefinition.taskDefinitionArn' --output text)
+          
+          # Update ECS service to use new task definition
+          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition $NEW_TASK_DEF_ARN
