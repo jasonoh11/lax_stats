@@ -13,7 +13,8 @@ RUN npm install
 
 # Copy the rest of your application code into the container.
 COPY . .
-COPY .env . 
+COPY backend/.env . 
+
 
 # Expose the port on which your app runs (adjust if your app uses a different port).
 EXPOSE 3000
