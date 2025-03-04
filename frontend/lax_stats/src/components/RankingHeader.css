@@ -6,6 +6,8 @@
 	position: sticky;
 	top: 0;
 	z-index: 1000;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	  
 }
 
 div.header-dropdowns{
@@ -41,6 +43,7 @@ div.header-labels {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
 	justify-items: center;
+	align-items: center;
 	text-align: left;
 	/* background-color: lightcoral; */
 }
