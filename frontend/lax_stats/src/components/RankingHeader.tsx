@@ -3,18 +3,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import React, { useState, useEffect } from "react";
 import { Tooltip } from "bootstrap";
-import { Dropdown, DropdownButton, Container } from "react-bootstrap";
+import { Dropdown, DropdownButton} from "react-bootstrap";
 
 const divisions = [1, 2];
 const years = [2025, 2024];
 
 interface Props {
-  league: String;
   title1: String;
   title2: String;
   title3: String;
   sortingCriteria: String;
-  onSortChange: (newSort: String) => void;
+  onSortChange: (newSort: string) => void;
   division: number;
   onDivisionChange: (newDivision: number) => void;
   year: number;
@@ -22,7 +21,6 @@ interface Props {
 }
 
 const RankingHeader = ({
-  league,
   title1,
   title2,
   title3,
@@ -66,8 +64,12 @@ const RankingHeader = ({
           className="ranking-title"
           // onSelect gets the combined eventKey, then splits it into division and year.
           onSelect={(eventKey) => {
-            const [division, year] = eventKey.split(" ");
-            handleSelect(division, year);
+            if (eventKey){
+              const [divStr, yearStr] = eventKey.split(" ");
+              const division = parseInt(divStr, 10);
+              const year = parseInt(yearStr, 10);
+              handleSelect(division, year);
+            }
           }}
         >
           {years.map((year) => (

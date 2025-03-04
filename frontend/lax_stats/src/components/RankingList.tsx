@@ -1,6 +1,6 @@
 import "./RankingList.css";
 import Ranking from "./Ranking";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import RankingHeader from "./RankingHeader";
 import ListGroup from "react-bootstrap/ListGroup";
 
@@ -42,7 +42,6 @@ const RankingList = () => {
     <>
       <ListGroup>
         <RankingHeader
-          league="MCLA D1"
           title1="Record"
           title2="Rating"
           title3="Schedule"
