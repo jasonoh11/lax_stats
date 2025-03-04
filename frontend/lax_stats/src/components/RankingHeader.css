@@ -3,6 +3,9 @@
 	color: white;
 	font-family: 'Roboto', sans-serif;
 	flex-direction: column;
+	position: sticky;
+	top: 0;
+	z-index: 1000;
 }
 
 div.header-dropdowns{
