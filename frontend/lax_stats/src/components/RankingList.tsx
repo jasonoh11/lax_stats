@@ -8,7 +8,7 @@ const RankingList = () => {
   var [teams, setTeams] = useState([]);
   var [sortingCriteria, setSortingCriteria] = useState("Rating");
   var [division, setDivision] = useState(1);
-  var [year, setYear] = useState(2024);
+  var [year, setYear] = useState(2025);
 
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -40,6 +40,7 @@ const RankingList = () => {
 
   return (
     <>
+    <div className="ranking-list-wrapper">
       <ListGroup>
         <RankingHeader
           title1="Record"
@@ -67,6 +68,7 @@ const RankingList = () => {
           />
         ))}
       </ListGroup>
+    </div>
     </>
   );
 };

@@ -1,5 +1,11 @@
 .custom-navbar {
 	background-color: #1a2b44 !important; 
+	/* background: linear-gradient(45deg, #1a2b44, #691b1b); */
 	color: white !important;
 	font-family: 'Roboto', sans-serif;
+	position: sticky;
+	top: 0;
+	z-index: 100;
 }
+
+  

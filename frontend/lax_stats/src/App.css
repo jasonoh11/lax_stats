@@ -1,12 +1,101 @@
 .app-wrapper {
 	background-color: #f5f5f5;
 }
+  
 
-.main-card{
-	width: 80%;
+/* Main wrapper for layout */
+.main-wrapper {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px;
+	gap: 20px;
+	flex: 1;
+	max-height: 1000px;
+}
+
+/* Main card style */
+.main-card {
+	width: 70%;
 	min-width: 500px;
 	margin-left: auto;
 	margin-right: auto;
-  	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+	border-radius: 8px;
 }
+
+/* Sidebar Style */
+.side-bar {
+	width: 30%;
+	background-color: #f4f4f4;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 20px; 
+	overflow-y: scroll;
+  }
+  
+  /* Header for sidebar */
+  .side-bar h2 {
+	color: #1a2b44;
+	font-size: 24px;
+	margin-bottom: 10px;
+  }
+  
+  /* Sidebar paragraph and text */
+  .side-bar p {
+	font-size: 16px;
+	line-height: 1.5;
+  }
+  
+  /* Sectioned content in sidebar */
+  .side-bar .section {
+	margin-bottom: 20px;
+  }
+  
+  .side-bar .section:not(:last-child) {
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 20px;
+  }
+  
+
+@media (max-width: 768px) {
+.main-wrapper {
+	flex-direction: column; /* Stack the main card and sidebar vertically on smaller screens */
+	gap: 10px;
+}
+
+.main-card, .side-bar {
+	width: 100%; /* Take up full width in mobile view */
+}
+}
+  
+
+.footer {
+	background-color: #f5f5f5; 
+	color: #1a2b44;
+	text-align: center;
+	padding: 20px 0;
+	position: relative;
+	bottom: 0;
+	width: 100%;
+  }
+  
+  .footer-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 15px;
+  }
+  
+  .footer a {
+	color: #db1f1f;
+	text-decoration: none;
+  }
+  
+  .footer a:hover {
+	text-decoration: underline;
+  }
+  
