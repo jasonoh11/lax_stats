@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import React, { useState, useEffect } from "react";
 import { Tooltip } from "bootstrap";
-import { Dropdown, DropdownButton} from "react-bootstrap";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 
 const divisions = [1, 2];
 const years = [2025, 2024];
@@ -45,24 +45,56 @@ const RankingHeader = ({
     };
   }, []);
 
-
   const [selected, setSelected] = useState(`MCLA D${division} - ${year}`);
 
+
   const handleSelect = (division: number, year: number) => {
-    setSelected(`MCLA D${division} - ${year}`);
+    // setSelected(`MCLA D${division} - ${year}`);
     onDivisionChange(division);
     onYearChange(year);
   };
 
   return (
     <div className="list-group-item ranking-header">
-      <div className="header-labels">
+      <div className="header-dropdowns">
         <DropdownButton
-          title={selected}
-          size="sm"
-          variant="outline-light"
+          title={`Division ${division}`}
           className="ranking-title"
-          // onSelect gets the combined eventKey, then splits it into division and year.
+          variant="outline-dark"
+          onSelect={(eventKey) => {
+            if (eventKey){
+              const division = parseInt(eventKey, 10);
+              handleSelect(division, year);
+            }
+          }}
+        >
+          {divisions.map((division) => (
+            <Dropdown.Item key={division} eventKey={division}>
+              {`Division ${division}`}
+            </Dropdown.Item>
+          ))}
+        </DropdownButton>
+        <DropdownButton
+          title={year}
+          className="ranking-title"
+          variant="outline-dark"
+          onSelect={(eventKey) => {
+            if (eventKey){
+              const year = parseInt(eventKey, 10);
+              handleSelect(division, year);
+            }
+          }}
+        >
+          {years.map((year) => (
+            <Dropdown.Item key={year} eventKey={year}>
+              {year}
+            </Dropdown.Item>
+          ))}
+        </DropdownButton>
+        {/* <DropdownButton
+          title={selected}
+          className="ranking-title"
+          variant="outline-dark"
           onSelect={(eventKey) => {
             if (eventKey){
               const [divStr, yearStr] = eventKey.split(" ");
@@ -86,7 +118,12 @@ const RankingHeader = ({
               <Dropdown.Divider />
             </React.Fragment>
           ))}
-        </DropdownButton>
+        </DropdownButton> */}
+      </div>
+      <div className="header-labels">
+        <div className="team-titles">
+          <span>Rank</span>
+        </div>
         <div className="stats-titles">
           <span>{title1}</span>
           <div>

@@ -1,22 +1,28 @@
 /* alternate background colors */
-.list-group-item.odd {
+/* .list-group-item.odd {
 	background-color: #f8f9fa;
-}
+} */
 
-.list-group-item.even {
+/* .list-group-item.even {
 	background-color: #e2e6ea;
-}
+} */
 
 /* flex container */
 div.list-group-item {
+  background-color: white;
   display: flex;  
   font-family: 'Roboto', sans-serif;
+  padding: 15px;
+}
+
+.list-group-team:hover {
+  background-color: #f5f5f5;
 }
 
 .team-info {
 	display: flex; /* flex conatiner for rank, img, name*/
   width: 20%;
-  min-width: 195px;
+  min-width: 200px;
   /* background-color: lightblue; */
 }
 
@@ -26,7 +32,7 @@ div.list-group-item {
 }
 
 .team-number{
-  flex: 0 0 25px; 
+  flex: 0 0 40px; 
   margin-left: 0px;
 }
 
@@ -40,11 +46,12 @@ div.list-group-item {
 .team-name {
   flex: 1; /* fill the rest of team-info */
   margin-left: 10px;
+  white-space: nowrap;      /* Prevent text from wrapping */
 }
 
 .team-name:hover{
-  color: #0066cc; /* Change to a color of your choice when hovered */
-  text-decoration: underline; /* Optionally add underline on hover */
+  color: #0066cc;
+  text-decoration: underline; 
 }
   
 

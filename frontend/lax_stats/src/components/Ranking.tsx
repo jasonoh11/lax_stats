@@ -26,7 +26,7 @@ const Ranking = ({
 }: Props) => {
   const team_url = `https://mcla.us/teams/${urlName}/${year}/schedule`;
   return (
-    <ListGroup.Item className={rank % 2 === 0 ? "even" : "odd"}>
+    <ListGroup.Item className="list-group-team">
       <div className="team-info">
         <span className="team-number">{rank}</span>
         <img className="team-img" src={logo_url} />

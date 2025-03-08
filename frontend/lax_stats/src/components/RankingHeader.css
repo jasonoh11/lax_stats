@@ -1,17 +1,19 @@
 .list-group-item.ranking-header{
-	background-color: #1a2b44;
-	color: white;
+	color: #1a2b44;
 	font-family: 'Roboto', sans-serif;
 	flex-direction: column;
 	position: sticky;
 	top: 0;
 	z-index: 1;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	/* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 	  
 }
 
 div.header-dropdowns{
-	padding-bottom: 5px;
+	padding-bottom: 20px;
+	display: flex;
+	gap: 15px;
+	z-index: 3;
 }
 
 .bi{
@@ -28,14 +30,15 @@ div.header-labels {
 	width: 100%;
 }
 
-.ranking-title{
+.team-titles{
 	/* background-color: lightblue; */
 	width: 20%;
 	min-width: 200px;
+	font-weight: 600;
 }
 
-.league-title{
-
+.ranking-title{
+	color: red !important;
 }
 
 .stats-titles{
@@ -45,6 +48,7 @@ div.header-labels {
 	justify-items: center;
 	align-items: center;
 	text-align: left;
+	font-weight: 600;
 	/* background-color: lightcoral; */
 }
 
