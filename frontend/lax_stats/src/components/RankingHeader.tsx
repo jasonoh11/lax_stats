@@ -1,7 +1,7 @@
 import "./RankingHeader.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import  { useState, useEffect } from "react";
+import  { useEffect } from "react";
 import { Tooltip } from "bootstrap";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
