@@ -1,7 +1,7 @@
 import "./RankingHeader.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { Tooltip } from "bootstrap";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
@@ -45,7 +45,7 @@ const RankingHeader = ({
     };
   }, []);
 
-  const [selected, setSelected] = useState(`MCLA D${division} - ${year}`);
+  // const [selected, setSelected] = useState(`MCLA D${division} - ${year}`);
 
 
   const handleSelect = (division: number, year: number) => {
