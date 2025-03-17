@@ -2,7 +2,25 @@ const express = require('express');
 const app = express();
 require('dotenv').config({ path: '.env' });
 const cors = require('cors');
-app.use(cors());
+
+const allowedOrigins = [
+    'https://main.dhrimcy1eeyjy.amplifyapp.com',
+    'https://www.mclaindex.com'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization'
+}));
+
+
 
 const mysql = require('mysql2');
 
@@ -61,7 +79,7 @@ app.get('/api/teams', (req, res) => {
 });
 
 app.get("/", (req, res) => {
-	res.send("Hello, lax_stats user! New backend update again");
+	res.send("Hello, MCLAIndex user!");
 });
 
 app.listen(3000, '0.0.0.0', () => {
