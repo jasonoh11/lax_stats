@@ -1,0 +1,85 @@
+.ranking-card {
+	padding: 15px;
+	border-radius: 8px, 8px, 0, 0;
+	cursor: pointer;
+	font-family: 'Roboto', sans-serif;
+	border-bottom: 1px solid #dee2e6;
+}
+  
+.ranking-card:hover {
+background-color: #f5f5f5;; 
+}
+
+.card-top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
+.ranking-card .team-info {
+	display: flex;
+	align-items: center;
+	width: 20%;
+}
+  
+
+.team-link {
+	color: #212529;
+	text-decoration: none;
+}
+
+.team-name:hover{
+	color: #212529;
+	text-decoration: none; 
+}
+
+.ranking-card .team-img {
+	height: 32px;
+	width: 32px; 
+	object-fit: contain; 
+}
+
+.ranking-card .team-details {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+.ranking-card .team-name {
+	font-size: 16px;
+	font-weight: 500;
+	margin: 0;
+}
+
+.ranking-card .team-number {
+	font-size: 12px;
+	color: #6b7280;
+
+}
+
+.ranking-card .rating-info {
+	text-align: right;
+}
+
+.ranking-card .team-rating {
+	font-size: 16px;
+	font-weight: 500;
+}
+
+.ranking-card .rating-label {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+.card-bottom {
+	display: flex;
+	justify-content: space-between;
+	font-size: 14px;
+}
+
+.record-label,
+.schedule-label {
+	color: #6b7280;
+	margin-right: 5px;
+}

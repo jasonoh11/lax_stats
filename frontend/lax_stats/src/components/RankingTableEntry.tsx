@@ -1,4 +1,4 @@
-import "./Ranking.css";
+import "./RankingTableEntry.css";
 import ListGroup from "react-bootstrap/ListGroup";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   logo_url: string;
 }
 
-const Ranking = ({
+const RankingTableEntry = ({
   rank,
   teamName,
   urlName,
@@ -43,4 +43,4 @@ const Ranking = ({
   );
 };
 
-export default Ranking;
+export default RankingTableEntry;

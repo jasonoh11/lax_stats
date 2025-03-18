@@ -5,15 +5,7 @@
 	position: sticky;
 	top: 0;
 	z-index: 1;
-	/* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 	  
-}
-
-div.header-dropdowns{
-	padding-bottom: 20px;
-	display: flex;
-	gap: 15px;
-	z-index: 3;
 }
 
 .bi{
@@ -24,32 +16,26 @@ div.header-dropdowns{
 	color: #ffdc51;
   }
 
-/* flex container */
 div.header-labels {
 	display: flex;  
 	width: 100%;
 }
 
 .team-titles{
-	/* background-color: lightblue; */
 	width: 20%;
 	min-width: 200px;
 	font-weight: 600;
 }
 
-.ranking-title{
-	color: red !important;
-}
 
 .stats-titles{
-	flex-grow: 1; /* take up the rest of list-group-item */
+	flex-grow: 1; 
 	display: grid;
-	grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+	grid-template-columns: repeat(3, 1fr); 
 	justify-items: center;
 	align-items: center;
 	text-align: left;
 	font-weight: 600;
-	/* background-color: lightcoral; */
 }
 
 .info-tooltip{

@@ -1,0 +1,9 @@
+.ranking-list-wrapper {
+	max-height: 100%;
+	overflow-y: scroll;
+  }
+
+.ranking-cards-wrapper {
+	max-height: 100%;
+	overflow-y: scroll;
+} 

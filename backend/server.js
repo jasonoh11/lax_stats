@@ -5,7 +5,8 @@ const cors = require('cors');
 
 const allowedOrigins = [
     'https://main.dhrimcy1eeyjy.amplifyapp.com',
-    'https://www.mclaindex.com'
+    'https://www.mclaindex.com',
+	'http://localhost:5173'
 ];
 
 app.use(cors({

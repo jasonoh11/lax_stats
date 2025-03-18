@@ -1,5 +1,5 @@
 import "./App.css";
-import RankingList from "./components/RankingList";
+import RankingTable from "./components/RankingContainer";
 import Nav from "./components/NavBar";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
       <Nav />
       <div className="main-wrapper">
         <div className="main-card">
-          <RankingList />
+          <RankingTable />
         </div>
         <div className="side-bar">
           <div className="section">
