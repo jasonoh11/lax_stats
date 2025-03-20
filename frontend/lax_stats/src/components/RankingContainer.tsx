@@ -26,6 +26,7 @@ const RankingContainer = () => {
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const url = `${apiUrl}/api/teams?sort_by=${sortingCriteria.toLowerCase()}&division=${division}&year=${year}`;
+    console.log(url)
 
     fetch(url, { mode: "cors" })
       .then((res) => {

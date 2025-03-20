@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from dotenv import load_dotenv
+import database
 
 
 
@@ -65,6 +66,7 @@ def scrape_team_info(year, division):
             if name_tag:
                 url_name = name_tag.get('href').split("/")[2]
                 url_names[url_name] = i
+                full_name = name_tag.text.strip()
 
                 conf_tag = a_tags[1]
                 if conf_tag:
@@ -77,9 +79,11 @@ def scrape_team_info(year, division):
                         image_url = get_final_image_url(img_tag, session)
 
                         img_map[image_url] = i
-                        teams.append([url_name, conf, image_url])
+                        # Tentatively add full name in case abbr name is not listed
+                        teams.append([url_name, conf, image_url, full_name])
                         i += 1
 
+        # print(teams)
 
         url = f"https://mcla.us/standings/division/d{division}?current_season_year={year}"
 
@@ -100,10 +104,9 @@ def scrape_team_info(year, division):
                     # compare image url to match url name with abbr_name
                     img_tag = row.find("img")
                     if img_tag:
-                        print("Getting url for", abbr_name)
                         image_url = get_final_image_url(img_tag, session)
                         if image_url in img_map:
-                            teams[img_map[image_url]].append(abbr_name)
+                            teams[img_map[image_url]][3] = abbr_name
 
     return teams
 
@@ -127,6 +130,27 @@ def scrape_teams(year, division):
         if name_tag:
             abbr_name = name_tag.text.strip()
             teams.add(abbr_name)
+
+
+    url = f"https://mcla.us/teams?view_by=division&current_season_year={year}"
+    html_text = requests.get(url).text
+    soup = BeautifulSoup(html_text, 'lxml')
+
+    tables = soup.find_all(id="teams-table")
+    table = tables[division - 1]
+    table_body = table.find("tbody")
+    rows = table_body.find_all("tr")
+
+    # url_names = database.get_team_url_names(2)
+
+    # Some teams in D2 aren't listed in MCLA standings, only in resources
+    for row in rows:
+        a_tags = row.find_all("a")
+        name_tag = a_tags[0]
+        if name_tag:
+            full_name = name_tag.text.strip()
+            if full_name not in teams:
+                teams.add(full_name)
 
     return teams
 
