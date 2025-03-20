@@ -36,13 +36,18 @@
   .side-bar {
 	flex: 3;
 	width: 30%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	min-height: none;
+	background-color: #f5f5f5;
+  }
+
+  .side-bar-card{
 	background-color: white;
 	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
   }
   
   /* Mobile Layout */
@@ -61,6 +66,18 @@
 
 	} 
 
+.side-bar, .criteria-list{
+	list-style: none;
+}
+
+.side-bar, .link{
+	text-decoration: none;
+	color: #1a2b44;
+}
+
+.bi-arrow-right-short{
+	/* font-size: large; */
+}
   
 
 .footer {

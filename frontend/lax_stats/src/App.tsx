@@ -11,37 +11,41 @@ function App() {
           <RankingTable />
         </div>
         <div className="side-bar">
-          <div className="section">
+          <div className="side-bar-card">
+            <h2 className="heading">About These Rankings</h2>
+            <p className="description">
+              Our ranking system evaluates team performance using a modified PageRank algorithm, which takes into account the following factors:
+            </p>
+            <ul className="criteria-list">
+              <li>
+              <i className="bi bi-check-lg"></i> Head-to-head results
+              </li>
+              <li>
+              <i className="bi bi-check-lg"></i> Margin of victory
+              </li>
+              <li>
+              <i className="bi bi-check-lg"></i> Strength of opponents
+              </li>
+            </ul>
+            <p className="description">
+              The model does <strong>not</strong> account for recent performance or home vs. away games, meaning all games are weighted equally regardless of when or where they were played.
+            </p>
+            <p className="description">
+              A team's schedule score is calculated as the average rating of all opponents they have played, meaning it is not an input in the rating calculation but rather a product of it.
+            </p>
+            <a href="" className="link"><strong>Learn More <i className="bi bi-arrow-right-short"></i></strong></a>
+          </div>
+          <div className="side-bar-card">
             <h2>Why the Rankings?</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In at
-              velit sem. Maecenas nunc tortor, dapibus tristique urna et,
-              pretium lobortis ex. Suspendisse hendrerit magna vitae turpis
-              laoreet lobortis. Etiam pellentesque nibh pulvinar, ultrices quam
-              in, aliquam dui. Pellentesque eget diam id diam maximus iaculis.
-            </p>
-          </div>
-          <div className="section">
-            <h2>How Rankings Work</h2>
-            <p>
-              Proin accumsan est a mauris consectetur lobortis. Vivamus aliquam
-              iaculis est. Nunc odio quam, posuere eu nulla vel, pretium feugiat
-              ligula. Orci varius natoque penatibus et magnis dis parturient
-              montes, nascetur ridiculus mus. Etiam mattis tincidunt ultrices.
-              Etiam eu gravida tellus. Aenean at nunc efficitur felis feugiat
-              fringilla. Etiam sed aliquet lorem.
-            </p>
-          </div>
-          <div className="section">
-            <h2>Methodology</h2>
-            <p>
-              Duis ut diam eleifend metus mattis consectetur sed vitae sem.
-              Phasellus vitae nisl fringilla, pulvinar est suscipit, efficitur
-              leo. Nunc nulla est, lobortis ac nulla ut, venenatis malesuada
-              arcu. Ut at lorem id purus varius faucibus. Cras imperdiet iaculis
-              ante quis vehicula. Nullam consectetur risus quis massa blandit
-              pharetra. Mauris eros felis, efficitur nec lacinia vitae, aliquet
-              ac risus.
+              MCLAIndex provides an unbiased ranking based purely on
+              performance. Other rankings, like the official Coaches Poll (voted
+              on by 27 coaches) and the Varsity Club Lacrosse x ULAX rankings,
+              are valuable but naturally influenced by personal biases.
+              MCLAIndex removes that subjectivity by evaluating teams solely by
+              their results. These rankings aren’t a definitive statement on
+              who’s best but a useful tool to compare resumes and understand
+              team strength.
             </p>
           </div>
         </div>

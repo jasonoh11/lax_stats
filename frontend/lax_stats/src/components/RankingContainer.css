@@ -1,6 +1,7 @@
 .ranking-list-wrapper {
 	max-height: 100%;
 	overflow-y: scroll;
+	border-radius: 8px;
   }
 
 .ranking-cards-wrapper {
