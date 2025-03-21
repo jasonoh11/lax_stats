@@ -54,13 +54,16 @@ const RankingContainer = () => {
 
   if (isMobile) {
     return (
-      <div className="ranking-cards-wrapper">
+      <>
+      <div className="ranking-cards-header">
         <RankingDropdowns
-          division={division}
-          onDivisionChange={handleDivisionChange}
-          year={year}
-          onYearChange={handleYearChange}
-        />
+            division={division}
+            onDivisionChange={handleDivisionChange}
+            year={year}
+            onYearChange={handleYearChange}
+          />
+      </div>
+      <div className="ranking-cards-wrapper">
         {teams.map((team, index) => (
           <RankingCard
             key={index}
@@ -76,6 +79,7 @@ const RankingContainer = () => {
           />
         ))}
       </div>
+      </>
     );
   } else {
     return (

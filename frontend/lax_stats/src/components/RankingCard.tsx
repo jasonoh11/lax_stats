@@ -27,31 +27,27 @@ const RankingCard = ({
 
   return (
     <div className="ranking-card">
-      <div className="card-top">
+      <div className="card-left">
+        <span className="team-number">#{rank}</span>
+      </div>
+      <div className="card-right">
         <div className="team-info">
           <img src={logo_url} className="team-img" />
           <div className="team-details">
             <a className="team-link" href={team_url} target="_blank">
               <span className="team-name">{teamName}</span>
             </a>
-            <div className="team-number">Rank {rank}</div>
+            <span className="team-record">
+              {wins}-{losses}
+            </span>
           </div>
         </div>
         <div className="rating-info">
           <div className="team-rating">{rating}</div>
-          <div className="rating-label">Rating</div>
-        </div>
-      </div>
-      <div className="card-bottom">
-        <div className="record-info">
-          <span className="record-label">Record:</span>{" "}
-          <span>
-            {wins}-{losses}
-          </span>
-        </div>
-        <div className="schedule-info">
-          <span className="schedule-label">Schedule:</span>{" "}
-          <span>{schedule}</span>
+          <div className="schedule-info">
+            <span className="schedule-label">SOS:</span>{" "}
+            <span>{schedule}</span>
+          </div>
         </div>
       </div>
     </div>

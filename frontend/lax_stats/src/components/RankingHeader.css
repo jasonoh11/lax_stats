@@ -5,7 +5,8 @@
 	position: sticky;
 	top: 0;
 	z-index: 1;
-	  
+	border-radius: 8px 8px 0 0 !important;
+	border-top: none;
 }
 
 .bi{
@@ -19,6 +20,7 @@
 div.header-labels {
 	display: flex;  
 	width: 100%;
+	padding-top: 15px;
 }
 
 .team-titles{
