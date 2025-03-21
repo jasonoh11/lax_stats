@@ -10,4 +10,11 @@
 	z-index: 100;
 }
 
+.navbar-nav	{
+	gap: 5px;
+}
+
+.active-link {
+	color: white;
+}
   
