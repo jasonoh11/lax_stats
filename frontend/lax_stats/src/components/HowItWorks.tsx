@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import "tailwindcss";
+import React, { useState } from "react";
+// import "tailwindcss";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Footer from "./Footer";
 import "./HowItWorks.css";
