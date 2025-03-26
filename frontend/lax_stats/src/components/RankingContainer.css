@@ -22,17 +22,6 @@
 @media (max-width: 768px) {
 	.ranking-cards-wrapper {
 	  max-height: 500px;
-	  /* overflow-y: auto;
-	  scrollbar-width: thin; */
 	}
-/*   
-	/* Optional: Hide scrollbar for a cleaner look */
-	.ranking-cards-wrapper::-webkit-scrollbar {
-	  width: 6px; /* Adjust as needed */
-	}
-	.ranking-cards-wrapper::-webkit-scrollbar-thumb {
-	  background-color: rgba(0, 0, 0, 0.2); /* Subtle scrollbar */
-	  border-radius: 10px;
-	} */
   }
   
