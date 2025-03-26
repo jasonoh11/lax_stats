@@ -21,4 +21,8 @@
 	height: auto;
 	object-fit: contain;
 }
+
+.nav-title {
+	margin-right: 0;
+}
   

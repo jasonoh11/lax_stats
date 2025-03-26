@@ -30,7 +30,7 @@ function SideBar() {
           opponents they have played, meaning it is not an input in the rating
           calculation but rather a product of it.
         </p>
-        <a href="" className="link">
+        <a href="/how-it-works" className="link">
           <strong>
             Learn More <i className="bi bi-arrow-right-short"></i>
           </strong>

@@ -37,7 +37,7 @@ const FAQ: React.FC = () => {
 
   return (
     <div className="max-w-lg sm:max-w-2xl md:max-w-4xl mx-auto p-4 sm:p-6">
-      <div className="bg-white rounded-lg shadow-md p-6 sm:p-8 mt-6 sm:mt-8">
+      <div className="bg-white rounded-lg shadow-md p-6 sm:p-8 mt-6 sm:mt-8 mb-10">
         <h2 className="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8">
           Frequently Asked Questions
         </h2>

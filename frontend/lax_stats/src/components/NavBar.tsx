@@ -8,13 +8,13 @@ function NavBar() {
 
   return (
     <Navbar
-      expand="lg"
+      expand="md"
       className="bg-body-tertiary custom-navbar"
       variant="dark"
     >
       <Container>
-        <img src="/white-logo.png" alt="" className="nav-logo mx-2"/>
-        <Navbar.Brand href="/">MCLAIndex</Navbar.Brand>
+        <a href="/"><img src="/white-logo.png" alt="" className="nav-logo mx-2"/></a>
+        <Navbar.Brand href="/" className="nav-title">MCLAIndex</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">

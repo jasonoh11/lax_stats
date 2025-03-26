@@ -143,7 +143,6 @@ const HowItWorks: React.FC = () => {
                 </div>
               </div>
               <div className="algo-footer mb-6">
-                {/* <i className='bi bi-lightbulb'></i> */}
                 <div>
                   With each iteration, teams that consistently beat good
                   opponents rise to the top, while teams with weak schedules or
