@@ -141,7 +141,7 @@ const HowItWorks: React.FC = () => {
                   </ol>
                 </div>
               </div>
-              <div className="algo-footer mb-6">
+              <div className="algo-footer mb-8 mt-8">
                 <div>
                   <i className="bi bi-info-circle"></i>
                   With each iteration, teams that consistently beat good
