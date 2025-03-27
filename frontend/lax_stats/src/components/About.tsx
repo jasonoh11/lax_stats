@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./About.css";
 import CardCarousel from "./CardCarousel";
 import Footer from "./Footer";
