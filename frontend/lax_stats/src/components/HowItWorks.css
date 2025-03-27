@@ -74,6 +74,11 @@
 	color: #1a2b44;
 }
 
+.bi-info-circle {
+	font-size: 18px;
+	margin-right: 10px;
+}
+
 @media (max-width: 768px) {
 	.graph-container{
 		flex-direction: column;

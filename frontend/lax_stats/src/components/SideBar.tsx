@@ -11,9 +11,6 @@ function SideBar() {
         </p>
         <ul className="criteria-list">
           <li>
-            <i className="bi bi-check-lg"></i> Head-to-head results
-          </li>
-          <li>
             <i className="bi bi-check-lg"></i> Margin of victory
           </li>
           <li>

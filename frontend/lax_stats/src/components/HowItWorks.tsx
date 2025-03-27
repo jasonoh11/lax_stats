@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Footer from "./Footer";
 import "./HowItWorks.css";
-import FAQ from "./FAQ"
+import FAQ from "./FAQ";
 
 const HowItWorks: React.FC = () => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -81,16 +81,15 @@ const HowItWorks: React.FC = () => {
                     </li>
                   </ul>
                   <div>
-                    <p className="text-gray-700">In the example graph:</p>
+                    <p className="text-gray-700">Example Graph Representation:</p>
                     <ul className="list-disc pl-6 mb-6 text-gray-700">
                       <li className="mb-2">
-                        Florida → Texas (weight 4) | 16-12 Texas win
+                        Florida → Texas (Weight: 4) — Texas wins 16-12
                       </li>
                       <li className="mb-2">
-                        Texas → Liberty (weight 2) | 12-10 Liberty win
+                        Texas → Liberty (Weight: 2) — Liberty wins 12-10
                       </li>
                     </ul>
-                    <p className="text-gray-700">and so on</p>
                   </div>
                 </div>
               </div>
@@ -144,6 +143,7 @@ const HowItWorks: React.FC = () => {
               </div>
               <div className="algo-footer mb-6">
                 <div>
+                  <i className="bi bi-info-circle"></i>
                   With each iteration, teams that consistently beat good
                   opponents rise to the top, while teams with weak schedules or
                   poor performance against quality opponents fall.

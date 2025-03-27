@@ -13,7 +13,7 @@ function Footer() {
           </div>
           <div className="flex items-center gap-6">
             <a
-              href="https://github.com/jasonoh1226"
+              href="https://github.com/jasonoh11/mcla_index"
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link text-gray-600 hover:text-gray-900 transition-colors"
@@ -21,7 +21,7 @@ function Footer() {
               <i className="bi bi-github text-xl"></i>
             </a>
             <a
-              href="https://instagram.com/mcla_index"
+              href="https://instagram.com/mclaindex"
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link text-gray-600 hover:text-gray-900 transition-colors"
@@ -29,7 +29,7 @@ function Footer() {
               <i className="bi bi-instagram text-xl"></i>
             </a>
             <a
-              href="https://linkedin.com/in/jasonoh"
+              href="https://linkedin.com/in/jasonoh5"
               target="_blank"
               rel="noopener noreferrer"
               className="footer-link text-gray-600 hover:text-gray-900 transition-colors"
