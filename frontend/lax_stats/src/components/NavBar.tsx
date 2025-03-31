@@ -13,7 +13,7 @@ function NavBar() {
       variant="dark"
     >
       <Container>
-        <a href="/"><img src="/mclaindex-logo.png" alt="" className="nav-logo mx-2"/></a>
+        <a href="/"><img src="/logo_no_bg.png" alt="" className="nav-logo mx-2"/></a>
         <Navbar.Brand href="/" className="nav-title">MCLAIndex</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
