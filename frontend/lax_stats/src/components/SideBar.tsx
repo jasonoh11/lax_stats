@@ -1,4 +1,4 @@
-import "./SideBar.css"
+import "./SideBar.css";
 
 function SideBar() {
   return (
@@ -18,12 +18,7 @@ function SideBar() {
           </li>
         </ul>
         <p className="description">
-          The model does <strong>not</strong> account for recent performance or
-          home vs. away games, meaning all games are weighted equally regardless
-          of when or where they were played.
-        </p>
-        <p className="description">
-          A team's schedule score is calculated as the average rating of all
+          A team's strength of schedule is calculated as the average rating of all
           opponents they have played, meaning it is not an input in the rating
           calculation but rather a product of it.
         </p>
@@ -37,13 +32,40 @@ function SideBar() {
         <h2>Why the Rankings?</h2>
         <p>
           MCLAIndex provides an unbiased ranking based purely on performance.
-          Other rankings, like the official Coaches Poll (voted on by 27
-          coaches) and the Varsity Club Lacrosse x ULAX rankings, are valuable
-          but naturally influenced by personal biases. MCLAIndex removes that
-          subjectivity by evaluating teams solely by their results. These
-          rankings aren’t a definitive statement on who’s best but a useful tool
-          to compare resumes and understand team strength.
+          While other rankings, like the official{" "}
+          <a
+            href="https://mcla.us/polls?division_id=d1&week_key=week-4"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link"
+          >
+            <strong>Coaches Poll</strong>
+          </a>{" "}
+          (voted on by 27 coaches) and the{" "}
+          <a
+            href="https://www.instagram.com/varsityclublacrosse/?hl=en"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link"
+          >
+            <strong>Varsity Club Lacrosse x ULAX rankings</strong>
+          </a>{" "}
+          offer valuable perspectives, they naturally include personal biases.
+          MCLAIndex removes that subjectivity by evaluating teams solely by
+          their results.
         </p>
+        <p>
+          These rankings are meant to complement rather than replace existing polls, serving
+          as an objective reference point to evaluate team performance. At the
+          end of the day, no ranking model is perfect, which is why across all
+          major sports, humans have the final decision on rankings and
+          tournament seedings.
+        </p>
+        <a href="/about" className="link">
+          <strong>
+            About <i className="bi bi-arrow-right-short"></i>
+          </strong>
+        </a>
       </div>
     </div>
   );
