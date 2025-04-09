@@ -43,7 +43,7 @@ const HowItWorks: React.FC = () => {
                 </p>
               </div>
               <div className="pagerank-img">
-                <img src="/pagerank-grok.jpg" alt="" />
+                <img src="/pagerank-sora.png" alt="" />
               </div>
             </div>
           </div>

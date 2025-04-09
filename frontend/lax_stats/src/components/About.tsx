@@ -22,11 +22,11 @@ const About: React.FC = () => {
               <div className="flex-2">
                 <p className="text-gray-700 leading-relaxed mb-4">
                   As a midfielder and CS major at The University of Texas,
-                  MCLAIndex is the perfect intersection between two fields I'm
+                  MCLAIndex is a great intersection between two fields I'm
                   passionate about: lacrosse and data/software engineering. Of
                   course, a player creating rankings for their own league can
                   raise questions of bias/favoritism. That's why transparency is
-                  at the core of this project; the entire source code and
+                  at the core of this project. The entire source code and
                   algorithm is available on my{" "}
                   <a
                     href="https://github.com/jasonoh11/mcla_index"
