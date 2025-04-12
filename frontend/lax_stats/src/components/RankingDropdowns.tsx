@@ -20,7 +20,7 @@ const RankingDropdowns = ({
   year,
   onYearChange,
 }: Props) => {
-  var [lastUpdated, setLastUpdated] = useState("hiii");
+  var [lastUpdated, setLastUpdated] = useState("");
 
   const handleSelect = (division: number, year: number) => {
     onDivisionChange(division);
