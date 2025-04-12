@@ -5,6 +5,11 @@ const FAQ: React.FC = () => {
 
   const faqs = [
     {
+      question: "Which games are included in the rankings?",
+      answer:
+        "Games are only considered if they're between two MCLA teams in the same division. For example, D2 vs. D1 games or MCLA vs. NCAA games are not included in the database.",
+    },
+    {
       question: "How do you collect game results?",
       answer:
         "All team and game data is scraped from mcla.us meaning our data is dependent on the accuracy and recency of the official MCLA website.",

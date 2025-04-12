@@ -13,7 +13,7 @@ def update_team_info(db, year, division, league_id):
 Rescrape games for a given league and update the records/rankings
 '''
 def update_league(db, year, division, league_id, min_games=1, manual_games=[], weeks=15):
-	print("Updating division " +  division + ", " + year + ", " + "League ID: " + league_id)
+	print("Updating division", division, ",", year, ",", "League ID:", league_id)
 	league = scrape.scrape_teams(year, division)
 	games = scrape.scrape_games(league, year, weeks)
 
@@ -76,9 +76,9 @@ def main():
 	# update_league(db, 2024, 2, 2, 3, d2_2024_tourney_games)
 
 	# update_team_info(db, 2025, 1, 3)
-	update_league(db, 2025, 1, 3)
+	# update_league(db, 2025, 1, 3)
 
-	# update_league(db, 2025, 2, 4)
+	update_league(db, 2025, 2, 4)
 
 	db.close()
 if __name__ == "__main__":
