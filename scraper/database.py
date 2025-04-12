@@ -122,6 +122,13 @@ def populate_rank(db_connection, league, league_id):
     for (team, schedule_rating) in schedule_ratings.items():
         my_cursor.execute(insert_schedule_query, (schedule_rating, team, league_id))
 
+    update_last_updated_query = """
+                UPDATE leagues
+                SET last_updated = NOW()
+                WHERE league_id = %s;
+                """
+    my_cursor.execute(update_last_updated_query, (league_id,))
+
 
     db_connection.commit()
     my_cursor.close()

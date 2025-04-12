@@ -33,29 +33,6 @@ const db = mysql.createPool({
 	database: process.env.DB_NAME
   });
 
-app.get('/api/games/', (req, res) => {
-	var query = `SELECT * FROM games LIMIT 100`;
-	db.query(query, (err, result, fields) => {
-		if (err) {
-			res.status(500).send('Database query failed');
-		} else {
-			res.json(result);
-		}
-	});	
-});
-
-app.get('/api/games/:team', (req, res) => {
-	var team = req.params.team;
-	var query = `SELECT * FROM games WHERE team1 = '${team}' OR team2 = '${team}'`;
-	db.query(query, (err, result, fields) => {
-		if (err) {
-			res.status(500).send('Database query failed');
-		} else {
-			if (result.length == 0) res.status(404).send("The team could not be found.");
-			res.json(result);
-		}
-	});	
-});
 
 app.get('/api/teams', (req, res) => {
 	const division = parseInt(req.query.division, 10);
@@ -66,7 +43,6 @@ app.get('/api/teams', (req, res) => {
 	if (!allowedSortFields.includes(sort_by)) {
 		return res.status(400).json({ error: "Invalid sorting criteria" });
 	}
-	// console.log("Fetching teams with id: " + league_id);
 
 	var query = `SELECT * FROM teams WHERE division = ${division} AND year = ${year} ORDER BY ${sort_by} DESC`;
 	db.query(query, (err, result, fields) => {
@@ -78,6 +54,21 @@ app.get('/api/teams', (req, res) => {
 	});
 
 });
+
+app.get('/api/leagues', (req, res) => {
+	const division = req.query.division;
+	const year = parseInt(req.query.year, 10);
+
+	const query = `SELECT last_updated FROM leagues WHERE division = ? AND year = ?`;
+	db.query(query, [division, year], (err, result) => {
+		if (err) {
+			res.status(500).send('Database query failed');
+		} else {
+			res.json(result);
+		}
+	});
+});
+
 
 app.get("/", (req, res) => {
 	res.send("Hello, MCLAIndex user!");
