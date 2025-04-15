@@ -25,7 +25,7 @@ const HowItWorks: React.FC = () => {
         {/* Introduction */}
         <section className="mb-12">
           <div className="bg-white rounded-lg shadow-md p-8">
-            <h3 className="text-xl font-bold mb-4">Powered by PageRank</h3>
+            <h3 className="text-xl font-bold">Powered by PageRank</h3>
             <div className="header-container">
               <div className="pagerank-desc text-gray-700 mb-4">
                 <p>
