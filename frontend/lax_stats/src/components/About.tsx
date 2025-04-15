@@ -19,7 +19,7 @@ const About: React.FC = () => {
               Meet the Developer
             </h3>
             <div className="flex dev-container items-start gap-8">
-              <div className="flex-2">
+              <div className="flex-3">
                 <p className="text-gray-700 leading-relaxed mb-4">
                   As a midfielder and CS major at The University of Texas,
                   MCLAIndex is a great intersection between two fields I'm
@@ -38,9 +38,9 @@ const About: React.FC = () => {
                 </p>
                 <h6>- Jason Oh, #11</h6>
               </div>
-              <div className="flex-1 bg-gray-100 rounded-lg overflow-hidden">
+              <div className="flex-2 bg-gray-100 rounded-lg overflow-hidden">
                 <img
-                  src="/jason-lax.png"
+                  src="/jason_oh_11.png"
                   alt="Jason Oh"
                   className="w-full h-auto"
                 />
