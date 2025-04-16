@@ -80,7 +80,7 @@ def populate_games(db_connection, league_set, games, division, league_id, min_ga
 '''
 Get rank calculations from rank/calculate rank and update db
 '''
-def populate_rank(db_connection, league, league_id):
+def populate_rank(db_connection, league, league_id, update=True):
 
     my_cursor = db_connection.cursor()
 
@@ -99,35 +99,36 @@ def populate_rank(db_connection, league, league_id):
 
     team_ratings = rank.calculate_rank(games, ids)
 
-    update_rating_query = """
-                UPDATE teams
-                SET rating = %s
-                WHERE team_name = %s
-                AND league_id = %s;
-                """
-    
-    for (team, rating) in team_ratings.items():
-        my_cursor.execute(update_rating_query, (rating, team, league_id))
+    if(update):
+        update_rating_query = """
+                    UPDATE teams
+                    SET rating = %s
+                    WHERE team_name = %s
+                    AND league_id = %s;
+                    """
+        
+        for (team, rating) in team_ratings.items():
+            my_cursor.execute(update_rating_query, (rating, team, league_id))
 
 
-    insert_schedule_query = """
-                UPDATE teams
-                SET schedule = %s
-                WHERE team_name = %s
-                AND league_id = %s;
-                """
-    
-    schedule_ratings = rank.calculate_schedule(team_ratings, games)
+        insert_schedule_query = """
+                    UPDATE teams
+                    SET schedule = %s
+                    WHERE team_name = %s
+                    AND league_id = %s;
+                    """
+        
+        schedule_ratings = rank.calculate_schedule(team_ratings, games)
 
-    for (team, schedule_rating) in schedule_ratings.items():
-        my_cursor.execute(insert_schedule_query, (schedule_rating, team, league_id))
+        for (team, schedule_rating) in schedule_ratings.items():
+            my_cursor.execute(insert_schedule_query, (schedule_rating, team, league_id))
 
-    update_last_updated_query = """
-                UPDATE leagues
-                SET last_updated = NOW()
-                WHERE league_id = %s;
-                """
-    my_cursor.execute(update_last_updated_query, (league_id,))
+        update_last_updated_query = """
+                    UPDATE leagues
+                    SET last_updated = NOW()
+                    WHERE league_id = %s;
+                    """
+        my_cursor.execute(update_last_updated_query, (league_id,))
 
 
     db_connection.commit()

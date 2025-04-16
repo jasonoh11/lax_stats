@@ -81,7 +81,13 @@ def print_contributions(teams, ids, ranking_vector, scaled_contributions):
 		for name, scaled in sorted(contribs, key=lambda x: x[1], reverse=True)[:10]:
 			print(f"{name:25s} | {scaled:.2f} pts")
 
-
+'''
+Print ratings in a formatted manner
+'''
+def print_ratings(team_ratings):
+	print("=== Team Rankings ===")
+	for team, rating in sorted(team_ratings.items(), key=lambda x: x[1], reverse=True):
+		print(f"{team:<25} | {rating:.4f}")
 
 def calculate_rank(games, ids):
 
@@ -98,6 +104,12 @@ def calculate_rank(games, ids):
 			# Compress the reward for blowouts
 			adj_matrix[ids[loser], ids[winner]] += np.sqrt(margin)
 
+	# Add a mock 1-goal loss to self to allow teams to retain some ranking
+	RETENTION_WEIGHT = 1.0
+	for i in range(num_teams):
+		adj_matrix[i, i] += RETENTION_WEIGHT
+
+
 
 	# Normalize each row - handle undefeated teams by distributing equally across all columns
 	for row in adj_matrix:
@@ -112,8 +124,6 @@ def calculate_rank(games, ids):
 
 	ranking_vector, scaled_contributions = power_iteration(markov_matrix)
 	team_ratings = {team: float(ranking_vector[id]) for team, id in ids.items()}
-
-	# print_contributions(["Florida", "Virginia Tech", "Florida State", "Texas", "Liberty"], ids, ranking_vector, scaled_contributions)
 
 
 	return team_ratings
