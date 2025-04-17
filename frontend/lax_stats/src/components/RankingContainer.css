@@ -21,7 +21,28 @@
 
 @media (max-width: 768px) {
 	.ranking-cards-wrapper {
-	  max-height: 500px;
+		position: relative;
 	}
+
+	.limit-height {
+		max-height: 450px;
+	}
+
+	.ranking-expand-row {
+		width: 100%;
+		text-align: center;
+		padding: 10px 0;
+		background-color: white;
+		color: #333;
+		font-weight: 500;
+		font-size: 15px;
+		border-top: 1px solid #ddd;
+		cursor: pointer;
+		transition: background 0.2s;
+	  }
+	  
+	  .ranking-expand-row:hover {
+		background-color: #eaeaea;
+	  }
   }
   

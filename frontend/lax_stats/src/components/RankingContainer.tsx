@@ -11,6 +11,7 @@ const RankingContainer = () => {
   var [sortingCriteria, setSortingCriteria] = useState("Rating");
   var [division, setDivision] = useState(1);
   var [year, setYear] = useState(2025);
+  var [expanded, setExpanded] = useState(false);
 
   var [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   useEffect(() => {
@@ -26,7 +27,7 @@ const RankingContainer = () => {
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const url = `${apiUrl}/api/teams?sort_by=${sortingCriteria.toLowerCase()}&division=${division}&year=${year}`;
-    console.log(url)
+    console.log(url);
 
     fetch(url, { mode: "cors" })
       .then((res) => {
@@ -55,30 +56,38 @@ const RankingContainer = () => {
   if (isMobile) {
     return (
       <>
-      <div className="ranking-cards-header">
-        <RankingDropdowns
+        <div className="ranking-cards-header">
+          <RankingDropdowns
             division={division}
             onDivisionChange={handleDivisionChange}
             year={year}
             onYearChange={handleYearChange}
           />
-      </div>
-      <div className="ranking-cards-wrapper">
-        {teams.map((team, index) => (
-          <RankingCard
-            key={index}
-            rank={index + 1}
-            teamName={team["team_name"]}
-            urlName={team["url_name"]}
-            wins={team["wins"]}
-            losses={team["losses"]}
-            rating={team["rating"]}
-            schedule={team["schedule"]}
-            year={team["year"]}
-            logo_url={team["logo_url"]}
-          />
-        ))}
-      </div>
+        </div>
+        <div
+          className={`ranking-cards-wrapper${!expanded ? " limit-height" : ""}`}
+        >
+          {teams.map((team, index) => (
+            <RankingCard
+              key={index}
+              rank={index + 1}
+              teamName={team["team_name"]}
+              urlName={team["url_name"]}
+              wins={team["wins"]}
+              losses={team["losses"]}
+              rating={team["rating"]}
+              schedule={team["schedule"]}
+              year={team["year"]}
+              logo_url={team["logo_url"]}
+            />
+          ))}
+        </div>
+        <div
+          className="ranking-expand-row"
+          onClick={() => setExpanded(!expanded)}
+        >
+          <span>Show {expanded ? "Less ▴" : "More ▾"}</span>
+        </div>
       </>
     );
   } else {
