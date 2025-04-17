@@ -62,6 +62,9 @@ const RankingContainer = () => {
             onDivisionChange={handleDivisionChange}
             year={year}
             onYearChange={handleYearChange}
+            sortingCriteria={sortingCriteria}
+            onSortChange={handleSortChange}
+            isMobile={true}
           />
         </div>
         <div
@@ -79,6 +82,7 @@ const RankingContainer = () => {
               schedule={team["schedule"]}
               year={team["year"]}
               logo_url={team["logo_url"]}
+              sortingCriteria={sortingCriteria}
             />
           ))}
         </div>
@@ -101,6 +105,9 @@ const RankingContainer = () => {
                 onDivisionChange={handleDivisionChange}
                 year={year}
                 onYearChange={handleYearChange}
+                sortingCriteria={sortingCriteria}
+                onSortChange={handleSortChange}
+                isMobile={false}
               />
               <RankingHeader
                 sortingCriteria={sortingCriteria}

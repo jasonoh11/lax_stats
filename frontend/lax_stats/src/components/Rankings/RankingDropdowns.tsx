@@ -12,6 +12,9 @@ interface Props {
   onDivisionChange: (newDivision: number) => void;
   year: number;
   onYearChange: (newYear: number) => void;
+  sortingCriteria: String;
+  onSortChange: (newSort: string) => void;
+  isMobile: boolean;
 }
 
 const RankingDropdowns = ({
@@ -19,6 +22,9 @@ const RankingDropdowns = ({
   onDivisionChange,
   year,
   onYearChange,
+  sortingCriteria,
+  onSortChange,
+  isMobile,
 }: Props) => {
   var [lastUpdated, setLastUpdated] = useState("");
 
@@ -96,8 +102,16 @@ const RankingDropdowns = ({
           ))}
         </DropdownButton>
       </div>
-      <div className="last-updated">
-        Updated: <span>{lastUpdated}</span>
+      <div className="header-info">
+        <div className="last-updated">
+          Updated: <span>{lastUpdated}</span>
+        </div>
+        {isMobile && (
+          <div className="sort-button" onClick={() => onSortChange(sortingCriteria === "Rating" ? "Schedule" : "Rating")}>
+            <i className="bi bi-filter-right"></i>
+            <span>{sortingCriteria} </span>
+          </div>
+        )}
       </div>
     </div>
   );

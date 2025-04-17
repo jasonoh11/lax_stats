@@ -10,6 +10,7 @@ interface Props {
   schedule: number;
   year: number;
   logo_url: string;
+  sortingCriteria: String;
 }
 
 const RankingCard = ({
@@ -22,6 +23,7 @@ const RankingCard = ({
   schedule,
   year,
   logo_url,
+  sortingCriteria
 }: Props) => {
   const team_url = `https://mcla.us/teams/${urlName}/${year}/schedule`;
 
@@ -43,10 +45,10 @@ const RankingCard = ({
           </div>
         </div>
         <div className="rating-info">
-          <div className="team-rating">{rating}</div>
+          <div className="team-rating">{sortingCriteria === "Rating" ? rating : schedule}</div>
           <div className="schedule-info">
-            <span className="schedule-label">SOS:</span>{" "}
-            <span>{schedule}</span>
+            <span className="schedule-label">{sortingCriteria === "Rating" ? "SOS:" : "Rating:"}</span>{" "}
+            <span>{sortingCriteria === "Rating" ? schedule : rating}</span>
           </div>
         </div>
       </div>
