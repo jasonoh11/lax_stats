@@ -1,5 +1,5 @@
 import "./Home.css";
-import RankingTable from "./RankingContainer";
+import RankingTable from "./Rankings/RankingContainer";
 import SideBar from "./SideBar";
 import Footer from "./Footer";
 

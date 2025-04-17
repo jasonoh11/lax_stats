@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Footer from "./Footer";
+import Footer from "../Footer";
 import "./HowItWorks.css";
-import FAQ from "./FAQ";
+import FAQ from "../About/FAQ";
 
 const HowItWorks: React.FC = () => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -81,7 +81,9 @@ const HowItWorks: React.FC = () => {
                     </li>
                   </ul>
                   <div>
-                    <p className="text-gray-700">Example Graph Representation:</p>
+                    <p className="text-gray-700">
+                      Example Graph Representation:
+                    </p>
                     <ul className="list-disc pl-6 mb-6 text-gray-700">
                       <li className="mb-2">
                         Florida → Texas (Weight: 4) — Texas wins 16-12
