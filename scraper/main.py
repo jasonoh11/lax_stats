@@ -76,9 +76,10 @@ def main():
     # update_league(db, 2024, 2, 2, 3, d2_2024_tourney_games)
 
     # update_team_info(db, 2025, 1, 3)
-    update_league(db, 2025, 1, 3)
 
-    update_league(db, 2025, 2, 4)
+    update_league(db, 2025, 1, 3, 1, [], 17)
+
+    update_league(db, 2025, 2, 4, 1, [], 17)
 
 
 

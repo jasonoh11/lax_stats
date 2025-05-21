@@ -156,6 +156,20 @@ def clear_teams(db_connection, league_id):
 
     return num_teams
 
+def get_url_names(db_connection, league_id):
+    my_cursor = db_connection.cursor()
+    my_cursor.execute(f'SELECT url_name FROM teams WHERE league_id = {league_id}')
+    url_names = [x[0] for x in my_cursor.fetchall()]
+    return url_names
+
+def get_games_played(db_connection, league_id):
+    my_cursor = db_connection.cursor()
+    my_cursor.execute(f'SELECT url_name, wins, losses FROM teams WHERE league_id = {league_id}')
+    games_played = {}
+    for (team, wins, losses) in my_cursor.fetchall():
+        games_played[team] = wins + losses
+    return games_played
+
 
 def get_connection():
     load_dotenv()
